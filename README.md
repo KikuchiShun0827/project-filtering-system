@@ -13,6 +13,14 @@ npm install
 npm run dev
 ```
 
+## 公開（GitHub Pages）
+
+`main` への push で [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) が走り、`https://kikuchishun0827.github.io/project-filtering-system/` に自動デプロイされます（初回のみリポジトリの Settings → Pages → Source を「GitHub Actions」にする必要があります）。
+
+- [`vite.config.ts`](vite.config.ts) の `base` はリポジトリ名に合わせています。リポジトリ名を変えたら合わせて変更してください
+- ルーティングは `HashRouter`（URL は `.../#/assignments` の形）。GitHub Pages はパスごとのファイルしか返せず、`BrowserRouter` だとリロードで 404 になるためです
+- 認証はモックなので、公開した時点で誰でも閲覧できます。実データを仮データに入れないこと
+
 ## 画面
 
 | 画面 | パス | 内容 |
