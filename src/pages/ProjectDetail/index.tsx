@@ -7,6 +7,7 @@ import { StatusBadge } from '../../components/ui'
 import { MAX_MATCH_RESULTS, rankProfiles } from '../../lib/match'
 import { useData } from '../../store/DataContext'
 import AssignedMembers from './AssignedMembers'
+import MailSource from './MailSource'
 import ProjectSpec from './ProjectSpec'
 import RequirementTable from './RequirementTable'
 
@@ -92,6 +93,12 @@ const ProjectDetail = () => {
           <Section label="募集要件">
             <RequirementTable requirements={project.requirements} />
           </Section>
+
+          {mail?.body && (
+            <Section label="元メール">
+              <MailSource mail={mail} />
+            </Section>
+          )}
         </div>
 
         <Section label="マッチする自社要員">

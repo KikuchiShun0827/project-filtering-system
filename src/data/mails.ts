@@ -13,6 +13,38 @@ export const mails: Mail[] = [
     fromAddress: 'sales@techbridge.example.co.jp',
     receivedAt: '2026-09-01T09:12:00',
     excerpt: 'お世話になっております。下記案件についてご要員のご提案をお願いいたします。',
+    body: `お世話になっております。
+株式会社テックブリッジ 営業部の佐藤です。
+
+下記案件についてご要員のご提案をお願いいたします。
+
+■案件名
+React/TypeScript フロントエンド開発
+
+■背景
+自社 SaaS のフロントエンドリニューアルです。
+既存 SPA の React 化と、コンポーネント基盤の整備をお願いします。
+
+■募集要件
+・React 3年以上（必須）
+・TypeScript 2年以上（必須）
+・Next.js の実務経験（尚可）
+・基本設計からの参画（尚可）
+・AWS の知見（不問）
+
+■条件
+勤務地：東京（渋谷）※週2リモート可
+単価　：65〜80万円/月（スキル見合い）
+開始　：2026/09/15
+期間　：長期（3ヶ月更新）
+
+ご提案いただける方がいらっしゃいましたら、
+スキルシートを添付のうえご返信ください。
+
+--------------------------------------
+株式会社テックブリッジ 営業部
+sales@techbridge.example.co.jp
+--------------------------------------`,
     label: 'project',
     classified: true,
     confidence: 0.96,
@@ -24,6 +56,32 @@ export const mails: Mail[] = [
     fromAddress: 'sasaki@next-systems.example.jp',
     receivedAt: '2026-09-01T10:34:00',
     excerpt: '9月開始、長期案件です。要件定義から入っていただける方を探しております。',
+    body: `お世話になっております。ネクストシステムズの佐々木です。
+
+9月開始、長期案件です。要件定義から入っていただける方を探しております。
+
+【案件】Java/Spring 業務システム改修 PL候補
+【概要】大手金融向け業務システムの改修案件です。
+　　　　チーム8名の取りまとめをお願いします。
+【場所】東京（大手町）常駐
+【単価】80〜95万円/月
+【期間】2026/09 〜 2027/03（延長あり）
+
+【必須】
+　Java 5年以上
+　Spring Boot 3年以上
+　PL/PM 経験 2年以上
+【尚可】
+　要件定義の経験
+　Oracle
+【不問】
+　応用情報技術者
+
+面談は1回（オンライン可）を予定しております。
+ご検討のほどよろしくお願いいたします。
+
+ネクストシステムズ株式会社
+佐々木 / sasaki@next-systems.example.jp`,
     label: 'project',
     classified: true,
     confidence: 0.94,
@@ -35,6 +93,35 @@ export const mails: Mail[] = [
     fromAddress: 'info@cloudlink.example.com',
     receivedAt: '2026-09-01T11:02:00',
     excerpt: 'Terraform による IaC 化を進めているプロジェクトです。',
+    body: `クラウドリンク株式会社です。
+いつもお世話になっております。
+
+Terraform による IaC 化を進めているプロジェクトです。
+フルリモートのため、関西以外の方もご相談いただけます。
+
+────────────────────
+案件名：AWSインフラ / SRE（IaC推進）
+────────────────────
+既存インフラの Terraform 化と EKS 移行が主なミッションです。
+移行後は監視・SLO 設計まで含めて SRE として関わっていただきます。
+
+・勤務地：大阪（フルリモート可）
+・単価：70〜90万円/月
+・開始：2026/09/15 〜 長期
+
+＜必須＞
+　AWS 4年以上
+　Terraform 2年以上
+＜尚可＞
+　Kubernetes（EKS）
+　Python での運用自動化
+＜不問＞
+　AWS認定ソリューションアーキテクト
+
+ご提案お待ちしております。
+
+クラウドリンク株式会社
+info@cloudlink.example.com`,
     label: 'project',
     classified: true,
     confidence: 0.91,
@@ -57,6 +144,29 @@ export const mails: Mail[] = [
     fromAddress: 'recruit@paytech.example.co.jp',
     receivedAt: '2026-09-01T13:20:00',
     excerpt: '決済基盤のリプレイス案件です。単価応相談（〜100万）。',
+    body: `お世話になっております。
+ペイテックソリューションズの採用担当です。
+
+決済基盤のリプレイス案件です。単価応相談（〜100万）。
+
+■ Go / マイクロサービス 決済系バックエンド
+
+決済基盤のマイクロサービス化に伴い、
+gRPC ベースの新規サービスの設計・実装をお願いします。
+
+必須：Go 3年以上
+尚可：gRPC / Kubernetes / PostgreSQL
+不問：基本設計の経験
+
+勤務地：東京（一部リモート可）
+単価　：85〜100万円/月
+稼働　：2026/10/01 〜 長期
+
+決済ドメインの経験は問いませんが、
+可用性を意識した設計ができる方を希望しております。
+
+ペイテックソリューションズ株式会社
+recruit@paytech.example.co.jp`,
     label: 'project',
     classified: true,
     confidence: 0.89,
@@ -90,6 +200,29 @@ export const mails: Mail[] = [
     fromAddress: 'partner@digital-commerce.example.com',
     receivedAt: '2026-09-01T16:22:00',
     excerpt: '既存 EC サイトの Nuxt3 リニューアル案件です。',
+    body: `デジタルコマース株式会社でございます。
+
+既存 EC サイトの Nuxt3 リニューアル案件です。
+フルリモートでの参画が可能です。
+
+▼案件概要
+　既存 EC サイトの Nuxt3 リプレイスです。
+　デザインシステムの構築も並行して進めます。
+
+▼スキル
+　必須：Vue.js 3年以上 / Nuxt.js 1年以上
+　尚可：TypeScript / Figma でのデザイン連携
+　不問：詳細設計からの参画
+
+▼条件
+　勤務地：東京（フルリモート）
+　単価　：60〜75万円/月
+　期間　：2026/09/15 〜 2027/02
+
+ご検討よろしくお願いいたします。
+
+デジタルコマース株式会社
+partner@digital-commerce.example.com`,
     label: 'project',
     classified: true,
     confidence: 0.95,
@@ -125,6 +258,31 @@ export const mails: Mail[] = [
     fromAddress: 'contact@dataforge.example.com',
     receivedAt: '2026-09-02T08:15:00',
     excerpt: 'BigQuery を用いたデータ基盤の構築メンバーを募集しております。',
+    body: `お世話になっております。データフォージ株式会社です。
+
+BigQuery を用いたデータ基盤の構築メンバーを募集しております。
+
+■Python/Django データ基盤構築
+BigQuery を中心としたデータ基盤の構築と、
+社内向け API の提供をお願いします。分析チームとの協業があります。
+
+■必須スキル
+・Python 4年以上
+・Django 2年以上
+
+■尚可
+・BigQuery / GCP
+・SQL でのパフォーマンスチューニング
+
+■条件
+東京（フルリモート）／ 65〜80万円/月
+2026/10/01 〜 長期
+
+まずはスキルシートのみでも構いませんので、
+ご連絡いただけますと幸いです。
+
+データフォージ株式会社
+contact@dataforge.example.com`,
     label: null,
     classified: false,
   },
@@ -135,6 +293,32 @@ export const mails: Mail[] = [
     fromAddress: 'takahashi@mobileworks.example.jp',
     receivedAt: '2026-09-02T08:41:00',
     excerpt: '既存アプリの機能追加・改修をお願いできる方を探しています。',
+    body: `モバイルワークスの高橋です。
+お世話になっております。
+
+既存アプリの機能追加・改修をお願いできる方を探しています。
+
+＜案件＞モバイルアプリ（React Native）改修
+　既存 React Native アプリの機能追加と改修です。
+　iOS / Android の両対応をお願いします。
+
+＜必須＞
+　React Native 2年以上
+　TypeScript 2年以上
+＜尚可＞
+　Firebase（Analytics / Crashlytics）
+＜不問＞
+　Swift でのネイティブモジュール実装
+
+＜条件＞
+　フルリモート（東京）
+　65〜78万円/月
+　2026/09/15 〜 2027/03
+
+ご提案お待ちしております。
+
+モバイルワークス株式会社 高橋
+takahashi@mobileworks.example.jp`,
     label: null,
     classified: false,
   },
@@ -155,6 +339,28 @@ export const mails: Mail[] = [
     fromAddress: 'info@analytics-lab.example.co.jp',
     receivedAt: '2026-09-02T09:33:00',
     excerpt: 'Snowflake / dbt での DWH 構築と可視化をお願いします。',
+    body: `アナリティクスラボです。いつもお世話になっております。
+
+Snowflake / dbt での DWH 構築と可視化をお願いします。
+
+【案件名】データ分析基盤 / BIダッシュボード構築
+【内容】
+　Snowflake + dbt による DWH 構築と、
+　BI ダッシュボードの設計・実装をお任せします。
+　事業部門へのヒアリングも発生します。
+
+【必須】SQL 5年以上 / Snowflake 1年以上
+【尚可】Airflow でのワークフロー構築 / Python
+【不問】Tableau
+
+【勤務地】東京（週2〜3出社）
+【単価】70〜85万円/月
+【開始】2026/09/15 〜 長期
+
+ご不明点がありましたらお気軽にお問い合わせください。
+
+アナリティクスラボ株式会社
+info@analytics-lab.example.co.jp`,
     label: null,
     classified: false,
   },

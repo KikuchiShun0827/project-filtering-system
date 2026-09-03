@@ -11,7 +11,8 @@ import TalentCard from './TalentCard'
 import Tabs, { type TabKey } from './Tabs'
 
 const Dashboard = () => {
-  const { projectItems, talentItems, otherMails, unclassifiedCount, classifying, lastResult, engineers } = useData()
+  const { projectItems, talentItems, otherMails, unclassifiedCount, classifying, lastResult, engineers, assignments } =
+    useData()
   const { settings } = useSettings()
   const navigate = useNavigate()
   const [tab, setTab] = useState<TabKey>('project')
@@ -25,7 +26,11 @@ const Dashboard = () => {
 
   // 設定の表示期間より古いメールは一覧・件数の両方から外す
   const inPeriod = (receivedAt: string) => withinDays(receivedAt, settings.displayDays)
-  const visibleProjects = projectItems.filter((i) => inPeriod(i.mail.receivedAt))
+  // 参画が決まった案件は募集中ではないので一覧から外す（参画案件一覧から辿れる）
+  const assignedProjectIds = new Set(assignments.map((a) => a.projectId))
+  const periodProjects = projectItems.filter((i) => inPeriod(i.mail.receivedAt))
+  const visibleProjects = periodProjects.filter((i) => !i.project || !assignedProjectIds.has(i.project.id))
+  const assignedHidden = periodProjects.length - visibleProjects.length
   const visibleTalents = talentItems.filter((i) => inPeriod(i.mail.receivedAt))
   const visibleOthers = otherMails.filter((m) => inPeriod(m.receivedAt))
 
@@ -101,7 +106,10 @@ const Dashboard = () => {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <span className="muted small">過去 {settings.displayDays} 日ぶんを表示</span>
+        <span className="muted small">
+          過去 {settings.displayDays} 日ぶんを表示
+          {tab === 'project' && assignedHidden > 0 && `／参画済み ${assignedHidden} 件は非表示`}
+        </span>
       </div>
 
       {tab === 'project' && (

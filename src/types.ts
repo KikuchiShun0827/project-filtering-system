@@ -159,6 +159,8 @@ export interface Mail {
   fromAddress: string
   receivedAt: string
   excerpt: string
+  /** メール本文の全文（無加工）。案件詳細の「元メール」欄で表示する */
+  body?: string
   /** AI 分類結果（未分類は null） */
   label: MailLabel | null
   /** 分類済み＝Gmail にラベル付与済み。未分類のものだけ次回読み込み対象になる */

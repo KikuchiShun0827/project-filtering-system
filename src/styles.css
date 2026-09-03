@@ -1205,3 +1205,22 @@ a.badge {
 a.badge:hover {
   filter: brightness(0.96);
 }
+
+/* 元メールの原文。改行・空白をそのまま見せる */
+.mail-body {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--text);
+}
+
+/* 折りたたみ時は下端をフェードさせて続きがあることを示す */
+.mail-body.clamped {
+  max-height: 240px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
+  mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
