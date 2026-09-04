@@ -23,6 +23,25 @@ export const WORK_STYLE_LABEL: Record<WorkStyle, string> = {
   onsite: '常駐',
 }
 
+/** 商流（自社から見た受注階層） */
+export type ContractTier = 'end' | 'prime' | 'secondary' | 'tertiary'
+
+export const CONTRACT_TIER_LABEL: Record<ContractTier, string> = {
+  end: 'エンド直',
+  prime: 'プライム',
+  secondary: '2次請け',
+  tertiary: '3次請け',
+}
+
+/** 外国籍の受け入れ可否 */
+export type ForeignerPolicy = 'allowed' | 'conditional' | 'denied'
+
+export const FOREIGNER_POLICY_LABEL: Record<ForeignerPolicy, string> = {
+  allowed: '可',
+  conditional: '条件付き可',
+  denied: '不可',
+}
+
 export type SkillCategory = 'language' | 'framework' | 'infra' | 'database' | 'process' | 'certification' | 'other'
 
 export const SKILL_CATEGORY_LABEL: Record<SkillCategory, string> = {
@@ -133,6 +152,24 @@ export interface Project {
   /** 開始時期 YYYY-MM-DD */
   startFrom: string
   period: string
+  /** 募集人数（名） */
+  headcount: number
+  /** 最寄り駅 */
+  nearestStation: string
+  /** 精算幅の下限（時間/月） */
+  settlementMin: number
+  /** 精算幅の上限（時間/月） */
+  settlementMax: number
+  /** 面談回数 */
+  interviewCount: number
+  /** 商流 */
+  contractTier: ContractTier
+  /** 年齢の上限（未設定なら不問） */
+  ageLimit?: number
+  /** 外国籍可否 */
+  foreignerPolicy: ForeignerPolicy
+  /** 勤務時間 */
+  workHours: string
   requirements: Requirement[]
   summary: string
 }

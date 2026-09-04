@@ -37,6 +37,14 @@ React/TypeScript フロントエンド開発
 単価　：65〜80万円/月（スキル見合い）
 開始　：2026/09/15
 期間　：長期（3ヶ月更新）
+最寄駅：渋谷駅
+人数　：2名
+時間　：9:30〜18:30（休憩60分）
+精算　：140〜180h
+商流　：プライム
+面談　：1回（オンライン）
+年齢　：45歳まで
+国籍　：日本国籍の方に限ります
 
 ご提案いただける方がいらっしゃいましたら、
 スキルシートを添付のうえご返信ください。
@@ -66,6 +74,14 @@ sales@techbridge.example.co.jp
 【場所】東京（大手町）常駐
 【単価】80〜95万円/月
 【期間】2026/09 〜 2027/03（延長あり）
+【駅】大手町駅
+【人数】1名
+【時間】9:00〜18:00（休憩60分）
+【精算】140〜180h
+【商流】2次請け
+【面談】2回
+【年齢】50歳まで
+【国籍】日本国籍のみ
 
 【必須】
 　Java 5年以上
@@ -108,6 +124,14 @@ Terraform による IaC 化を進めているプロジェクトです。
 ・勤務地：大阪（フルリモート可）
 ・単価：70〜90万円/月
 ・開始：2026/09/15 〜 長期
+・最寄駅：本町駅（出社時のみ）
+・募集人数：1名
+・勤務時間：9:00〜18:00（休憩60分）
+・精算幅：140〜180h
+・商流：エンド直
+・面談回数：1回（オンライン）
+・年齢制限：なし
+・外国籍：日本語ビジネスレベル（N1相当）であれば可
 
 ＜必須＞
 　AWS 4年以上
@@ -161,6 +185,14 @@ gRPC ベースの新規サービスの設計・実装をお願いします。
 勤務地：東京（一部リモート可）
 単価　：85〜100万円/月
 稼働　：2026/10/01 〜 長期
+最寄駅：五反田駅
+人数　：3名
+時間　：10:00〜19:00（休憩60分）
+精算　：150〜190h
+商流　：プライム
+面談　：2回
+年齢　：45歳まで
+国籍　：日本国籍の方に限ります
 
 決済ドメインの経験は問いませんが、
 可用性を意識した設計ができる方を希望しております。
@@ -218,6 +250,14 @@ recruit@paytech.example.co.jp`,
 　勤務地：東京（フルリモート）
 　単価　：60〜75万円/月
 　期間　：2026/09/15 〜 2027/02
+　最寄駅：新宿駅
+　人数　：2名
+　時間　：9:30〜18:30（休憩60分）
+　精算　：140〜180h
+　商流　：2次請け
+　面談　：1回
+　年齢　：40歳まで
+　国籍　：不問
 
 ご検討よろしくお願いいたします。
 
@@ -277,6 +317,9 @@ BigQuery を中心としたデータ基盤の構築と、
 ■条件
 東京（フルリモート）／ 65〜80万円/月
 2026/10/01 〜 長期
+最寄駅：品川駅／2名／9:00〜18:00（休憩60分）
+精算 140〜180h ／ 商流：プライム ／ 面談1回
+年齢不問／外国籍は日本語N1以上であれば可
 
 まずはスキルシートのみでも構いませんので、
 ご連絡いただけますと幸いです。
@@ -314,6 +357,14 @@ contact@dataforge.example.com`,
 　フルリモート（東京）
 　65〜78万円/月
 　2026/09/15 〜 2027/03
+　最寄駅：恵比寿駅（出社時のみ）
+　募集人数：1名
+　勤務時間：10:00〜19:00（休憩60分）
+　精算幅：140〜180h
+　商流：エンド直
+　面談：1回
+　年齢：45歳まで
+　外国籍：可
 
 ご提案お待ちしております。
 
@@ -356,6 +407,14 @@ Snowflake / dbt での DWH 構築と可視化をお願いします。
 【勤務地】東京（週2〜3出社）
 【単価】70〜85万円/月
 【開始】2026/09/15 〜 長期
+【最寄駅】田町駅
+【人数】2名
+【時間】9:00〜18:00（休憩60分）
+【精算】150〜190h
+【商流】プライム
+【面談】2回
+【年齢】50歳まで
+【国籍】日本国籍のみ
 
 ご不明点がありましたらお気軽にお問い合わせください。
 
@@ -389,6 +448,15 @@ export const projects: Project[] = [
     rateMax: 80,
     startFrom: '2026-09-15',
     period: '2026/09 〜 長期（3ヶ月更新）',
+    headcount: 2,
+    nearestStation: '渋谷駅',
+    settlementMin: 140,
+    settlementMax: 180,
+    interviewCount: 1,
+    contractTier: 'prime',
+    ageLimit: 45,
+    foreignerPolicy: 'denied',
+    workHours: '9:30〜18:30（休憩60分）',
     summary: '自社 SaaS のフロントエンドリニューアル。既存 SPA の React 化とコンポーネント基盤整備。',
     requirements: [
       { id: 'p01r1', label: 'React', category: 'framework', importance: 'must', minYears: 3 },
@@ -409,6 +477,15 @@ export const projects: Project[] = [
     rateMax: 95,
     startFrom: '2026-09-01',
     period: '2026/09 〜 2027/03（延長あり）',
+    headcount: 1,
+    nearestStation: '大手町駅',
+    settlementMin: 140,
+    settlementMax: 180,
+    interviewCount: 2,
+    contractTier: 'secondary',
+    ageLimit: 50,
+    foreignerPolicy: 'denied',
+    workHours: '9:00〜18:00（休憩60分）',
     summary: '大手金融向け業務システムの改修。要件定義からの参画で、チーム 8 名の取りまとめ。',
     requirements: [
       { id: 'p02r1', label: 'Java', category: 'language', importance: 'must', minYears: 5 },
@@ -430,6 +507,14 @@ export const projects: Project[] = [
     rateMax: 90,
     startFrom: '2026-09-15',
     period: '2026/09 〜 長期',
+    headcount: 1,
+    nearestStation: '本町駅',
+    settlementMin: 140,
+    settlementMax: 180,
+    interviewCount: 1,
+    contractTier: 'end',
+    foreignerPolicy: 'conditional',
+    workHours: '9:00〜18:00（休憩60分）',
     summary: '既存インフラの Terraform 化と EKS 移行。監視・SLO 設計まで含めた SRE ポジション。',
     requirements: [
       { id: 'p03r1', label: 'AWS', category: 'infra', importance: 'must', minYears: 4 },
@@ -450,6 +535,15 @@ export const projects: Project[] = [
     rateMax: 100,
     startFrom: '2026-10-01',
     period: '2026/10 〜 長期',
+    headcount: 3,
+    nearestStation: '五反田駅',
+    settlementMin: 150,
+    settlementMax: 190,
+    interviewCount: 2,
+    contractTier: 'prime',
+    ageLimit: 45,
+    foreignerPolicy: 'denied',
+    workHours: '10:00〜19:00（休憩60分）',
     summary: '決済基盤のマイクロサービス化。gRPC ベースの新規サービス設計・実装。',
     requirements: [
       { id: 'p04r1', label: 'Go', category: 'language', importance: 'must', minYears: 3 },
@@ -470,6 +564,15 @@ export const projects: Project[] = [
     rateMax: 75,
     startFrom: '2026-09-15',
     period: '2026/09 〜 2027/02',
+    headcount: 2,
+    nearestStation: '新宿駅',
+    settlementMin: 140,
+    settlementMax: 180,
+    interviewCount: 1,
+    contractTier: 'secondary',
+    ageLimit: 40,
+    foreignerPolicy: 'allowed',
+    workHours: '9:30〜18:30（休憩60分）',
     summary: '既存 EC サイトの Nuxt3 リプレイス。デザインシステムの構築も並行して実施。',
     requirements: [
       { id: 'p05r1', label: 'Vue.js', category: 'framework', importance: 'must', minYears: 3 },
@@ -490,6 +593,14 @@ export const projects: Project[] = [
     rateMax: 80,
     startFrom: '2026-10-01',
     period: '2026/10 〜 長期',
+    headcount: 2,
+    nearestStation: '品川駅',
+    settlementMin: 140,
+    settlementMax: 180,
+    interviewCount: 1,
+    contractTier: 'prime',
+    foreignerPolicy: 'conditional',
+    workHours: '9:00〜18:00（休憩60分）',
     summary: 'BigQuery を中心としたデータ基盤の構築と API 提供。分析チームとの協業あり。',
     requirements: [
       { id: 'p06r1', label: 'Python', category: 'language', importance: 'must', minYears: 4 },
@@ -510,6 +621,15 @@ export const projects: Project[] = [
     rateMax: 78,
     startFrom: '2026-09-15',
     period: '2026/09 〜 2027/03',
+    headcount: 1,
+    nearestStation: '恵比寿駅',
+    settlementMin: 140,
+    settlementMax: 180,
+    interviewCount: 1,
+    contractTier: 'end',
+    ageLimit: 45,
+    foreignerPolicy: 'allowed',
+    workHours: '10:00〜19:00（休憩60分）',
     summary: '既存 React Native アプリの機能追加と改修。iOS/Android 両対応。',
     requirements: [
       { id: 'p07r1', label: 'React Native', category: 'framework', importance: 'must', minYears: 2 },
@@ -529,6 +649,15 @@ export const projects: Project[] = [
     rateMax: 85,
     startFrom: '2026-09-15',
     period: '2026/09 〜 長期',
+    headcount: 2,
+    nearestStation: '田町駅',
+    settlementMin: 150,
+    settlementMax: 190,
+    interviewCount: 2,
+    contractTier: 'prime',
+    ageLimit: 50,
+    foreignerPolicy: 'denied',
+    workHours: '9:00〜18:00（休憩60分）',
     summary: 'Snowflake + dbt による DWH 構築と、BI ダッシュボードの設計・実装。',
     requirements: [
       { id: 'p08r1', label: 'SQL', category: 'database', importance: 'must', minYears: 5 },
