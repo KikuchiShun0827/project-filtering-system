@@ -8,6 +8,8 @@ import ProjectCard from './ProjectCard'
 import StatRow from './StatRow'
 import SyncModal from './SyncModal'
 import TalentCard from './TalentCard'
+import { PROJECT_FILTER, PROJECT_FILTER_LABEL, type ProjectFilterKey } from './projectFilter'
+import { PROJECT_SORT, PROJECT_SORT_LABEL, type ProjectSortKey } from './projectSort'
 import Tabs, { type TabKey } from './Tabs'
 
 const Dashboard = () => {
@@ -18,6 +20,8 @@ const Dashboard = () => {
   const [tab, setTab] = useState<TabKey>('project')
   const [syncOpen, setSyncOpen] = useState(false)
   const [keyword, setKeyword] = useState('')
+  const [projectFilter, setProjectFilter] = useState<ProjectFilterKey>('all')
+  const [projectSort, setProjectSort] = useState<ProjectSortKey>('received')
   /** 閉じた通知。再度読み込むと lastResult が別オブジェクトになり、通知が復活する */
   const [dismissed, setDismissed] = useState<typeof lastResult>(null)
 
@@ -30,13 +34,16 @@ const Dashboard = () => {
   const assignedProjectIds = new Set(assignments.map((a) => a.projectId))
   const periodProjects = projectItems.filter((i) => inPeriod(i.mail.receivedAt))
   const visibleProjects = periodProjects.filter((i) => !i.project || !assignedProjectIds.has(i.project.id))
-  const assignedHidden = periodProjects.length - visibleProjects.length
   const visibleTalents = talentItems.filter((i) => inPeriod(i.mail.receivedAt))
   const visibleOthers = otherMails.filter((m) => inPeriod(m.receivedAt))
 
-  const filteredProjects = visibleProjects.filter((i) =>
-    hit(`${i.mail.subject} ${i.mail.fromName} ${i.project?.requirements.map((r) => r.label).join(' ') ?? ''}`),
-  )
+  const filteredProjects = visibleProjects
+    // 案件情報が抽出できていないメールは条件を判定できないため、フィルター指定時は除く
+    .filter((i) => (projectFilter === 'all' ? true : i.project !== null && PROJECT_FILTER[projectFilter](i.project)))
+    .filter((i) =>
+      hit(`${i.mail.subject} ${i.mail.fromName} ${i.project?.requirements.map((r) => r.label).join(' ') ?? ''}`),
+    )
+    .sort(PROJECT_SORT[projectSort])
   const filteredTalents = visibleTalents.filter((i) =>
     hit(`${i.mail.subject} ${i.mail.fromName} ${i.talent?.skills.map((s) => s.name).join(' ') ?? ''}`),
   )
@@ -106,10 +113,32 @@ const Dashboard = () => {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <span className="muted small">
-          過去 {settings.displayDays} 日ぶんを表示
-          {tab === 'project' && assignedHidden > 0 && `／参画済み ${assignedHidden} 件は非表示`}
-        </span>
+        {tab === 'project' && (
+          <select
+            value={projectSort}
+            onChange={(e) => setProjectSort(e.target.value as ProjectSortKey)}
+            aria-label="案件の並び替え"
+          >
+            {(Object.keys(PROJECT_SORT_LABEL) as ProjectSortKey[]).map((k) => (
+              <option key={k} value={k}>
+                {PROJECT_SORT_LABEL[k]}
+              </option>
+            ))}
+          </select>
+        )}
+        {tab === 'project' && (
+          <select
+            value={projectFilter}
+            onChange={(e) => setProjectFilter(e.target.value as ProjectFilterKey)}
+            aria-label="案件の絞り込み"
+          >
+            {(Object.keys(PROJECT_FILTER_LABEL) as ProjectFilterKey[]).map((k) => (
+              <option key={k} value={k}>
+                {PROJECT_FILTER_LABEL[k]}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {tab === 'project' && (

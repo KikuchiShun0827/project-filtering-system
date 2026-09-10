@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AssignmentModal from '../../components/AssignmentModal'
+import CardMenu from '../../components/CardMenu'
 import { EmptyState, PageHeader } from '../../components/Page'
 import { matchRank } from '../../lib/match'
 import { useData } from '../../store/DataContext'
 import type { Assignment } from '../../types'
 
 const Assignments = () => {
-  const { activeProjects, assignments, updateAssignment } = useData()
+  const { activeProjects, assignments, updateAssignment, deleteAssignment } = useData()
   const navigate = useNavigate()
   const [editing, setEditing] = useState<Assignment | null>(null)
 
@@ -44,8 +45,8 @@ const Assignments = () => {
               <th>終了日</th>
               <th>単価</th>
               <th>備考</th>
-              {/* 操作列は内容ぶんだけに詰めて、ボタンを右端へ寄せる */}
-              <th style={{ width: '1%' }} />
+              {/* 操作列は内容ぶんだけに詰めて、メニューを右端へ寄せる */}
+              <th aria-label="操作" />
             </tr>
           </thead>
           <tbody>
@@ -68,17 +69,21 @@ const Assignments = () => {
                 </td>
                 <td style={{ whiteSpace: 'nowrap' }}>{a.rate ? `${a.rate} 万円` : '—'}</td>
                 <td className="muted small">{a.note ?? '—'}</td>
-                <td style={{ width: '1%', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                  {/* 行クリックの案件詳細遷移を打ち消して編集モーダルを開く */}
-                  <button
-                    className="btn btn-sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setEditing(a)
-                    }}
-                  >
-                    編集
-                  </button>
+                <td className="col-menu">
+                  <CardMenu
+                    label={`${a.projectTitle} の操作`}
+                    items={[
+                      { label: '編集', onSelect: () => setEditing(a) },
+                      {
+                        label: '削除',
+                        danger: true,
+                        // 元に戻せないので確認を挟む
+                        onSelect: () =>
+                          window.confirm(`「${a.projectTitle}」の参画を削除します。よろしいですか？`) &&
+                          deleteAssignment(a.id),
+                      },
+                    ]}
+                  />
                 </td>
               </tr>
             ))}

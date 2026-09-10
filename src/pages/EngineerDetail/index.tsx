@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import ApplicationModal from '../../components/ApplicationModal'
 import MatchCandidates from '../../components/MatchCandidates'
 import { DetailHeader, EmptyState, Section } from '../../components/Page'
 import { MAX_MATCH_RESULTS, rankProjects } from '../../lib/match'
 import { useData } from '../../store/DataContext'
-import { WORK_STYLE_LABEL } from '../../types'
+import { WORK_STYLE_LABEL, type Project } from '../../types'
 import AssignedProjects from './AssignedProjects'
 import ConditionList from './ConditionList'
 import ProfileCard from './ProfileCard'
@@ -12,7 +13,14 @@ import SkillList from './SkillList'
 
 const EngineerDetail = () => {
   const { engineerId } = useParams()
-  const { engineers, activeProjects, assignments } = useData()
+  const navigate = useNavigate()
+  const { engineers, activeProjects, assignments, mails, addApplications } = useData()
+  /** 応募モーダルを開いている案件 */
+  const [applyProject, setApplyProject] = useState<Project | null>(null)
+
+  /** 案件メールの送信元会社（メールが消えていれば案件のクライアント名） */
+  const companyOf = (project: Project) =>
+    mails.find((m) => m.id === project.mailId)?.fromCompany ?? project.client
 
   const engineer = engineers.find((e) => e.id === engineerId)
 
@@ -34,6 +42,11 @@ const EngineerDetail = () => {
         ),
         match: r.match,
         to: `/projects/${r.project.id}`,
+        action: (
+          <button className="btn btn-sm btn-primary" onClick={() => setApplyProject(r.project)}>
+            応募
+          </button>
+        ),
       })),
     [engineer, activeProjects],
   )
@@ -56,6 +69,25 @@ const EngineerDetail = () => {
           </Link>
         }
       />
+
+      {applyProject && (
+        <ApplicationModal
+          project={applyProject}
+          company={companyOf(applyProject)}
+          initialMemberIds={[engineer.id]}
+          onClose={() => setApplyProject(null)}
+          onSubmit={(draft) => {
+            addApplications({
+              projectId: applyProject.id,
+              projectTitle: applyProject.title,
+              company: companyOf(applyProject),
+              ...draft,
+            })
+            // 登録後は内容を確認できるよう応募管理へ送る
+            navigate('/applications')
+          }}
+        />
+      )}
 
       <div className="detail-grid">
         <div className="stack">

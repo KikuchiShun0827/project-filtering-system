@@ -15,7 +15,8 @@ export const DetailHeader = ({
   description,
   actions,
 }: {
-  title: ReactNode
+  /** 見出しが不要なページでは省略できる */
+  title?: ReactNode
   description?: ReactNode
   actions?: ReactNode
 }) => {
@@ -26,9 +27,11 @@ export const DetailHeader = ({
         <button className="btn btn-sm" onClick={() => navigate(-1)}>
           ← 戻る
         </button>
-        <h1 className="page-title" style={{ marginTop: 10 }}>
-          {title}
-        </h1>
+        {title && (
+          <h1 className="page-title" style={{ marginTop: 10 }}>
+            {title}
+          </h1>
+        )}
         {description && <p className="page-desc">{description}</p>}
       </div>
       {actions}

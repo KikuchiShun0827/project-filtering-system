@@ -34,6 +34,7 @@ const EngineerForm = ({
   const navigate = useNavigate()
 
   const [name, setName] = useState(initial?.name ?? '')
+  const [company, setCompany] = useState(initial?.company ?? '自社')
   const [age, setAge] = useState(initial?.age ?? 30)
   const [gender, setGender] = useState<Engineer['gender']>(initial?.gender ?? '回答なし')
   const [location, setLocation] = useState(initial?.location ?? '')
@@ -59,6 +60,7 @@ const EngineerForm = ({
 
     onSubmit({
       name: name.trim(),
+      company: company.trim() || '自社',
       age,
       gender,
       location: location.trim(),
@@ -90,6 +92,16 @@ const EngineerForm = ({
           <div className="field">
             <label htmlFor="name">氏名</label>
             <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div className="field">
+            <label htmlFor="company">所属会社</label>
+            <input
+              id="company"
+              type="text"
+              placeholder="自社 / 協力会社名"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+            />
           </div>
           <div className="field">
             <label htmlFor="age">年齢</label>

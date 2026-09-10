@@ -114,6 +114,8 @@ export const ASSIGNMENT_LABEL: Record<AssignmentStatus, string> = {
 
 /** 自社エンジニア */
 export interface Engineer extends MatchProfile {
+  /** 所属会社（自社 or 協力会社名） */
+  company: string
   age: number
   gender: '男性' | '女性' | '回答なし'
   /** 居住地 */
@@ -168,6 +170,8 @@ export interface Project {
   ageLimit?: number
   /** 外国籍可否 */
   foreignerPolicy: ForeignerPolicy
+  /** 実務未経験の受け入れ可否 */
+  inexperiencedOk: boolean
   /** 勤務時間 */
   workHours: string
   requirements: Requirement[]
@@ -193,6 +197,10 @@ export interface Mail {
   id: string
   subject: string
   fromName: string
+  /** 送信元の会社名 */
+  fromCompany: string
+  /** 送信元の担当者名（部署宛などで氏名が分からない場合は未設定） */
+  fromPerson?: string
   fromAddress: string
   receivedAt: string
   excerpt: string
@@ -234,4 +242,65 @@ export interface Assignment {
   note?: string
   /** 登録日時 ISO */
   createdAt: string
+}
+
+/** 応募（自社要員を案件へ提案してからの進捗） */
+export type ApplicationStatus = 'considering' | 'proposed' | 'interview' | 'won' | 'lost'
+
+export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
+  considering: '提案検討',
+  proposed: '提案済',
+  interview: '面談予定',
+  won: '成約',
+  lost: '見送り',
+}
+
+/** 提案検討 → 提案済 → 面談予定 → 成約／見送り の進行順。
+ *  返信が来たかどうかは進行ではなく通知マーク（hasUnreadReply）で表す */
+export const APPLICATION_STATUS_FLOW: ApplicationStatus[] = [
+  'considering',
+  'proposed',
+  'interview',
+  'won',
+  'lost',
+]
+
+/** 成約・見送りは進行が終わった状態 */
+export const isClosedApplication = (status: ApplicationStatus) => status === 'won' || status === 'lost'
+
+export interface Application {
+  id: string
+  projectId: string
+  /** 案件は元メール由来で消えることがあるので表示用の値も持たせる */
+  projectTitle: string
+  /** 案件メールの送信元会社 */
+  company: string
+  engineerId: string
+  engineerName: string
+  /** 応募時点のマッチ率 0-100 */
+  matchScore: number
+  status: ApplicationStatus
+  /** 応募日 YYYY-MM-DD */
+  appliedAt: string
+  /** ステータスを最後に動かした日 YYYY-MM-DD */
+  updatedAt: string
+  note?: string
+  /** 提案メールへの返信を受信した日時 ISO（未受信なら未設定） */
+  repliedAt?: string
+  /** 受信した返信を確認済みにしたか */
+  replyRead?: boolean
+}
+
+/** 返信が届いていて、まだ確認していない応募（一覧・サイドバーの通知マーク） */
+export const hasUnreadReply = (a: Application) => a.repliedAt !== undefined && !a.replyRead
+
+/** 応募モーダルで入力する内容（要員ぶんの応募をまとめて作る） */
+export interface ApplicationDraft {
+  projectId: string
+  projectTitle: string
+  company: string
+  members: { engineerId: string; engineerName: string; matchScore: number }[]
+  status: ApplicationStatus
+  appliedAt: string
+  note?: string
 }

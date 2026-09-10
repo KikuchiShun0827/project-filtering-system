@@ -1,11 +1,8 @@
 import { StatusBadge, waitingDays } from '../../components/ui'
-import { useData } from '../../store/DataContext'
-import { ASSIGNMENT_LABEL, WORK_STYLE_LABEL, type AssignmentStatus, type Engineer } from '../../types'
+import { WORK_STYLE_LABEL, type Engineer } from '../../types'
 
-/** 氏名・ステータス・基本スペック */
+/** 氏名・ステータス・基本スペック。ステータスの変更は編集画面から行う */
 const ProfileCard = ({ engineer }: { engineer: Engineer }) => {
-  const { updateEngineer } = useData()
-
   return (
     <>
       <div className="profile-head">
@@ -30,44 +27,38 @@ const ProfileCard = ({ engineer }: { engineer: Engineer }) => {
         </div>
       </div>
 
-      <p className="small muted" style={{ marginBottom: 4 }}>
-        {engineer.summary}
-      </p>
+      <div className="spec-block">
+        <div className="section-label">概要</div>
+        <p className="small muted" style={{ margin: 0 }}>
+          {engineer.summary}
+        </p>
+      </div>
 
-      <dl className="spec-grid">
-        <div className="spec">
-          <dt>勤務可能エリア</dt>
-          <dd>{engineer.workAreas.join('・')}</dd>
-        </div>
-        <div className="spec">
-          <dt>稼働形態</dt>
-          <dd>{WORK_STYLE_LABEL[engineer.workStyle]}</dd>
-        </div>
-        <div className="spec">
-          <dt>希望単価</dt>
-          <dd>{engineer.desiredRate} 万円〜</dd>
-        </div>
-        <div className="spec">
-          <dt>稼働可能日</dt>
-          <dd>{engineer.availableFrom}</dd>
-        </div>
-        <div className="spec">
-          <dt>ステータス</dt>
-          <dd>
-            <select
-              value={engineer.status}
-              onChange={(e) => updateEngineer(engineer.id, { status: e.target.value as AssignmentStatus })}
-              style={{ fontSize: 12, padding: '3px 8px' }}
-            >
-              {(Object.keys(ASSIGNMENT_LABEL) as AssignmentStatus[]).map((s) => (
-                <option key={s} value={s}>
-                  {ASSIGNMENT_LABEL[s]}
-                </option>
-              ))}
-            </select>
-          </dd>
-        </div>
-      </dl>
+      <div className="spec-block">
+        <div className="section-label">基本情報</div>
+        <dl className="spec-grid">
+          <div className="spec">
+            <dt>所属会社</dt>
+            <dd>{engineer.company}</dd>
+          </div>
+          <div className="spec">
+            <dt>勤務可能エリア</dt>
+            <dd>{engineer.workAreas.join('・')}</dd>
+          </div>
+          <div className="spec">
+            <dt>稼働形態</dt>
+            <dd>{WORK_STYLE_LABEL[engineer.workStyle]}</dd>
+          </div>
+          <div className="spec">
+            <dt>希望単価</dt>
+            <dd>{engineer.desiredRate} 万円〜</dd>
+          </div>
+          <div className="spec">
+            <dt>稼働可能日</dt>
+            <dd>{engineer.availableFrom}</dd>
+          </div>
+        </dl>
+      </div>
     </>
   )
 }

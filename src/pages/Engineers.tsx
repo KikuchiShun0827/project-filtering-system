@@ -7,6 +7,9 @@ import { ASSIGNMENT_LABEL, WORK_STYLE_LABEL, type AssignmentStatus } from '../ty
 
 type StatusFilter = 'all' | AssignmentStatus
 
+/** 一覧の並び順（手が空いている要員から先に見せる） */
+const STATUS_ORDER: Record<AssignmentStatus, number> = { waiting: 0, upcoming: 1, assigned: 2 }
+
 const Engineers = () => {
   const { engineers } = useData()
   const navigate = useNavigate()
@@ -14,11 +17,19 @@ const Engineers = () => {
   const [status, setStatus] = useState<StatusFilter>('all')
 
   const kw = keyword.trim().toLowerCase()
-  const list = engineers.filter((e) => {
-    const matchStatus = status === 'all' || e.status === status
-    const text = `${e.name} ${e.location} ${e.workAreas.join(' ')} ${e.skills.map((s) => s.name).join(' ')}`
-    return matchStatus && (kw === '' || text.toLowerCase().includes(kw))
-  })
+  const list = engineers
+    .filter((e) => {
+      const matchStatus = status === 'all' || e.status === status
+      const text = `${e.name} ${e.company} ${e.location} ${e.workAreas.join(' ')} ${e.skills.map((s) => s.name).join(' ')}`
+      return matchStatus && (kw === '' || text.toLowerCase().includes(kw))
+    })
+    // 待機中 → 参画予定 → 稼働中。待機中は待機期間の長い順、参画予定は稼働可能日の早い順
+    .sort((a, b) => {
+      if (a.status !== b.status) return STATUS_ORDER[a.status] - STATUS_ORDER[b.status]
+      if (a.status === 'waiting') return (a.waitingSince ?? '9999-12-31').localeCompare(b.waitingSince ?? '9999-12-31')
+      if (a.status === 'upcoming') return a.availableFrom.localeCompare(b.availableFrom)
+      return a.name.localeCompare(b.name, 'ja')
+    })
 
   return (
     <>
@@ -35,7 +46,7 @@ const Engineers = () => {
         <input
           className="grow"
           type="text"
-          placeholder="氏名・スキル・エリアで絞り込み"
+          placeholder="氏名・所属会社・スキル・エリアで絞り込み"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
@@ -55,6 +66,7 @@ const Engineers = () => {
           <thead>
             <tr>
               <th>氏名</th>
+              <th>所属会社</th>
               <th>年齢 / 性別</th>
               <th>所在地</th>
               <th>勤務可能エリア / 形態</th>
@@ -68,6 +80,7 @@ const Engineers = () => {
             {list.map((e) => (
               <tr key={e.id} onClick={() => navigate(`/engineers/${e.id}`)}>
                 <td style={{ fontWeight: 700 }}>{e.name}</td>
+                <td className="muted">{e.company}</td>
                 <td className="muted">
                   {e.age}歳 / {e.gender}
                 </td>

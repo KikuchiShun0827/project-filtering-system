@@ -1,10 +1,11 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/AuthContext'
 import { useData } from '../store/DataContext'
-import { BriefcaseIcon, GearIcon, ListIcon, UsersIcon } from './icons'
+import { BriefcaseIcon, GearIcon, ListIcon, SendIcon, UsersIcon } from './icons'
 
 const NAV = [
   { to: '/', label: '案件・人材一覧', Icon: ListIcon, end: true },
+  { to: '/applications', label: '応募管理', Icon: SendIcon, end: false },
   { to: '/assignments', label: '参画案件一覧', Icon: BriefcaseIcon, end: false },
   { to: '/engineers', label: '要員管理', Icon: UsersIcon, end: false },
   { to: '/settings', label: '設定', Icon: GearIcon, end: false },
@@ -12,7 +13,7 @@ const NAV = [
 
 const Layout = () => {
   const { user, logout } = useAuth()
-  const { unclassifiedCount } = useData()
+  const { unclassifiedCount, unreadReplyCount } = useData()
   const navigate = useNavigate()
 
   return (
@@ -33,7 +34,14 @@ const Layout = () => {
                 <n.Icon />
               </span>
               <span>{n.label}</span>
-              {n.to === '/' && unclassifiedCount > 0 && <span className="tab-count">{unclassifiedCount}</span>}
+              {/* 未分類メールが残っていれば赤いマークで知らせる */}
+              {n.to === '/' && unclassifiedCount > 0 && (
+                <span className="tab-count alert">{unclassifiedCount}</span>
+              )}
+              {/* 応募への返信が未確認なら赤いマークで知らせる */}
+              {n.to === '/applications' && unreadReplyCount > 0 && (
+                <span className="tab-count alert">{unreadReplyCount}</span>
+              )}
             </NavLink>
           ))}
         </nav>

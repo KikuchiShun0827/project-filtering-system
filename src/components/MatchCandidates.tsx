@@ -11,6 +11,8 @@ export interface MatchCandidate {
   match: MatchResult
   /** 名前クリック時の遷移先 */
   to: string
+  /** 内訳ボタンの横に置く操作（応募ボタンなど） */
+  action?: ReactNode
 }
 
 /**
@@ -55,13 +57,13 @@ const MatchCandidates = ({
               </div>
             </div>
           </div>
-          <button
-            className="btn btn-sm"
-            style={{ marginTop: 8 }}
-            onClick={() => setOpenId(openId === c.id ? null : c.id)}
-          >
-            {openId === c.id ? '内訳を閉じる' : 'マッチ率の内訳'}
-          </button>
+          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+            <button className="btn btn-sm" onClick={() => setOpenId(openId === c.id ? null : c.id)}>
+              {openId === c.id ? '内訳を閉じる' : 'マッチ率の内訳'}
+            </button>
+            {/* 操作は行の右端へ寄せる */}
+            {c.action && <div style={{ marginLeft: 'auto' }}>{c.action}</div>}
+          </div>
           {openId === c.id && (
             <div style={{ marginTop: 10 }}>
               <MatchBreakdown match={c.match} />

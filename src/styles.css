@@ -149,6 +149,11 @@ button {
   color: var(--accent);
 }
 
+/* 通知バッジはラベルの長さに関わらずサイドバー右端で縦に揃える */
+.nav-link .tab-count {
+  margin-left: auto;
+}
+
 .nav-icon {
   display: flex;
   align-items: center;
@@ -502,6 +507,7 @@ textarea:focus {
 }
 
 .card-menu-button {
+  position: relative;
   display: flex;
   align-items: center;
   border: 1px solid var(--border-strong);
@@ -1223,4 +1229,151 @@ a.badge:hover {
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
   mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
+
+/* 案件詳細の基本情報カード。メール情報／案件情報／概要を区切って並べる */
+.spec-block + .spec-block {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.spec-block .spec-grid {
+  margin: 0;
+}
+
+/* 要員詳細では氏名ブロックの下も同じ区切りにする */
+.profile-head + .spec-block {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* 応募一覧のステータス列。セレクトが現在の状態の表示も兼ねる */
+.status-select {
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+
+/* 開いた候補一覧まで状態色になると読みにくいので、選択肢は通常色に戻す */
+.status-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* 提案検討→成約／見送りの進行が色で分かるようにする */
+.app-status-considering {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.app-status-proposed {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.app-status-interview {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.app-status-won {
+  background: var(--high);
+  color: var(--accent-text);
+}
+
+.app-status-lost {
+  background: var(--low-soft);
+  color: var(--low);
+}
+
+/* モック挙動の注記。下の一覧を指す吹き出しにする */
+.mock-note {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 11px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+/* 吹き出しの尻尾。枠線ぶんを重ねて三角形の縁取りにする */
+.mock-note::before,
+.mock-note::after {
+  content: '';
+  position: absolute;
+  left: 26px;
+  border: 8px solid transparent;
+}
+
+.mock-note::before {
+  top: 100%;
+  border-top-color: var(--accent);
+}
+
+.mock-note::after {
+  top: calc(100% - 1.5px);
+  border-top-color: var(--accent-soft);
+}
+
+.mock-note-close {
+  flex: none;
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+/* 返信が届いた応募の通知マーク。メニューボタンの右上に重ねる */
+.card-menu-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: 1.5px solid var(--surface);
+}
+
+/* サイドバーの未確認バッジ。1桁でも丸く見えるよう最小幅を持たせる */
+.tab-count.alert {
+  min-width: 18px;
+  padding: 0 5px;
+  line-height: 16px;
+  text-align: center;
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+/* 行の操作メニュー列。幅を取らせず右端に寄せる */
+.table td.col-menu {
+  width: 1%;
+  padding-left: 0;
+}
+
+.table td.col-menu .card-menu {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 成約・見送りで進行が終わった応募は少し落として表示する */
+.table tbody tr.row-closed td {
+  opacity: 0.72;
 }

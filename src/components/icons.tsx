@@ -75,3 +75,11 @@ export const BriefcaseIcon = (props: SVGProps<SVGSVGElement>) => (
     <line x1="3" y1="12.5" x2="21" y2="12.5" />
   </Icon>
 )
+
+/** 応募管理（提案の送信） */
+export const SendIcon = (props: SVGProps<SVGSVGElement>) => (
+  <Icon {...props}>
+    <path d="M20.5 3.5 10.8 13.2" />
+    <path d="M20.5 3.5 14.4 20.5l-3.6-7.3-7.3-3.6z" />
+  </Icon>
+)

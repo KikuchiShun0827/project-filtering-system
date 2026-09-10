@@ -5,6 +5,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e01',
     name: '佐藤 拓真',
+    company: '自社',
     age: 32,
     gender: '男性',
     location: '東京都世田谷区',
@@ -39,6 +40,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e02',
     name: '田中 美咲',
+    company: 'ビーピーテック株式会社',
     age: 28,
     gender: '女性',
     location: '神奈川県横浜市',
@@ -72,6 +74,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e03',
     name: '鈴木 健一',
+    company: '自社',
     age: 41,
     gender: '男性',
     location: '東京都江東区',
@@ -107,6 +110,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e04',
     name: '高橋 由紀',
+    company: '自社',
     age: 35,
     gender: '女性',
     location: '大阪府大阪市',
@@ -141,6 +145,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e05',
     name: '伊藤 大輔',
+    company: 'ビーピーテック株式会社',
     age: 26,
     gender: '男性',
     location: '東京都練馬区',
@@ -174,6 +179,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e06',
     name: '渡辺 涼',
+    company: 'アルファリンク株式会社',
     age: 30,
     gender: '回答なし',
     location: '福岡県福岡市',
@@ -207,6 +213,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e07',
     name: '山本 蓮',
+    company: '自社',
     age: 38,
     gender: '男性',
     location: '東京都港区',
@@ -240,6 +247,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e08',
     name: '中村 彩',
+    company: '自社',
     age: 33,
     gender: '女性',
     location: '埼玉県さいたま市',
@@ -273,6 +281,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e09',
     name: '小林 隼人',
+    company: 'テクノスタッフ株式会社',
     age: 45,
     gender: '男性',
     location: '愛知県名古屋市',
@@ -306,6 +315,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e10',
     name: '加藤 実',
+    company: '自社',
     age: 29,
     gender: '男性',
     location: '東京都杉並区',
@@ -339,6 +349,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e11',
     name: '吉田 千尋',
+    company: 'アルファリンク株式会社',
     age: 31,
     gender: '女性',
     location: '東京都新宿区',
@@ -372,6 +383,7 @@ export const engineers: Engineer[] = [
   {
     id: 'e12',
     name: '松本 亮太',
+    company: '自社',
     age: 36,
     gender: '男性',
     location: '北海道札幌市',

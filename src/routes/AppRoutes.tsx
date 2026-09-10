@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from '../components/Layout'
+import Applications from '../pages/Applications'
 import Assignments from '../pages/Assignments'
 import Dashboard from '../pages/Dashboard'
 import EngineerDetail from '../pages/EngineerDetail'
@@ -23,6 +24,7 @@ const AppRoutes = () => (
     >
       <Route path="/" element={<Dashboard />} />
       <Route path="/projects/:projectId" element={<ProjectDetail />} />
+      <Route path="/applications" element={<Applications />} />
       <Route path="/assignments" element={<Assignments />} />
       <Route path="/engineers" element={<Engineers />} />
       {/* 静的セグメントが優先されるので :engineerId には吸われない */}

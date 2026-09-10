@@ -7,7 +7,7 @@ import { useData, type ProjectItem } from '../../store/DataContext'
 import { StatusBadge } from '../../components/ui'
 import { useSettings } from '../../store/SettingsContext'
 import { IMPORTANCE_LABEL, WORK_STYLE_LABEL } from '../../types'
-import MailMeta from './MailMeta'
+import { formatDateTime } from './format'
 import { mailMenuItems } from './mailMenu'
 import MatchPanel from './MatchPanel'
 
@@ -43,7 +43,6 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
         <h3 className="item-subject">
           {project ? <Link to={`/projects/${project.id}`}>{mail.subject}</Link> : mail.subject}
         </h3>
-        <MailMeta mail={mail} />
       </div>
       <CardMenu items={mailMenuItems(mail, setLabel, deleteMail)} />
     </div>
@@ -62,13 +61,14 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
         <div className="item-body">
           <div>
             {head}
-            <p className="small muted" style={{ margin: '10px 0 0' }}>
-              {project.summary}
-            </p>
             <dl className="spec-grid">
               <div className="spec">
-                <dt>取引先</dt>
-                <dd>{project.client}</dd>
+                <dt>送信元会社</dt>
+                <dd>{mail.fromCompany}</dd>
+              </div>
+              <div className="spec">
+                <dt>受信日時</dt>
+                <dd>{formatDateTime(mail.receivedAt)}</dd>
               </div>
               <div className="spec">
                 <dt>勤務地 / 形態</dt>
@@ -87,6 +87,10 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
                 <dd>
                   {project.startFrom}〜（{project.period}）
                 </dd>
+              </div>
+              <div className="spec">
+                <dt>実務未経験</dt>
+                <dd>{project.inexperiencedOk ? 'OK' : 'NG'}</dd>
               </div>
             </dl>
 

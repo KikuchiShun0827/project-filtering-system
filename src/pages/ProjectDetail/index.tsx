@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import AssignmentModal from '../../components/AssignmentModal'
+import ApplicationModal from '../../components/ApplicationModal'
 import MatchCandidates from '../../components/MatchCandidates'
 import { DetailHeader, EmptyState, Section } from '../../components/Page'
 import { StatusBadge } from '../../components/ui'
@@ -14,8 +14,8 @@ import RequirementTable from './RequirementTable'
 const ProjectDetail = () => {
   const { projectId } = useParams()
   const navigate = useNavigate()
-  const [assignOpen, setAssignOpen] = useState(false)
-  const { activeProjects, addAssignment, assignments, engineers, mails } = useData()
+  const [applyOpen, setApplyOpen] = useState(false)
+  const { activeProjects, addApplications, assignments, engineers, mails } = useData()
 
   const project = activeProjects.find((p) => p.id === projectId)
   const mail = mails.find((m) => m.id === project?.mailId)
@@ -48,32 +48,30 @@ const ProjectDetail = () => {
   return (
     <>
       <DetailHeader
-        title={project.title}
-        description={
-          <>
-            {project.client}
-            {mail && ` ／ 元メール：${mail.subject}`}
-          </>
-        }
         actions={
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn">メール作成</button>
-            <button className="btn btn-primary" onClick={() => setAssignOpen(true)}>
-              参画
+            <button className="btn">元メールを開く</button>
+            <button className="btn btn-primary" onClick={() => setApplyOpen(true)}>
+              応募
             </button>
           </div>
         }
       />
 
-      {assignOpen && (
-        <AssignmentModal
-          title="参画予定"
+      {applyOpen && (
+        <ApplicationModal
           project={project}
-          onClose={() => setAssignOpen(false)}
+          company={mail?.fromCompany ?? project.client}
+          onClose={() => setApplyOpen(false)}
           onSubmit={(draft) => {
-            addAssignment({ projectId: project.id, projectTitle: project.title, client: project.client, ...draft })
-            // 確定後は登録内容を確認できるよう参画案件一覧へ送る
-            navigate('/assignments')
+            addApplications({
+              projectId: project.id,
+              projectTitle: project.title,
+              company: mail?.fromCompany ?? project.client,
+              ...draft,
+            })
+            // 登録後は内容を確認できるよう応募管理へ送る
+            navigate('/applications')
           }}
         />
       )}
@@ -87,7 +85,7 @@ const ProjectDetail = () => {
           )}
 
           <Section>
-            <ProjectSpec project={project} />
+            <ProjectSpec project={project} mail={mail} />
           </Section>
 
           <Section label="募集要件">
