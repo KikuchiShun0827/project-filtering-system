@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { useMemo, type MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import CardMenu from '../../components/CardMenu'
@@ -33,7 +34,7 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
   /** カードの余白部分のクリックで案件詳細へ。カード内の操作要素は素通しする */
   const openDetail = (e: MouseEvent<HTMLElement>) => {
     if (!project) return
-    if ((e.target as HTMLElement).closest('a, button, select, input, .match-row')) return
+    if ((e.target as HTMLElement).closest('a, button, select, input, [role="button"]')) return
     navigate(`/projects/${project.id}`)
   }
 
@@ -49,7 +50,7 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
   )
 
   return (
-    <Section className={project ? 'card-clickable' : undefined} onClick={openDetail}>
+    <Section className={project ? styles.clickable : undefined} onClick={openDetail}>
       {!project ? (
         <>
           {head}
@@ -58,7 +59,7 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
           </p>
         </>
       ) : (
-        <div className="item-body">
+        <div className={styles.body}>
           <div>
             {head}
             <dl className="spec-grid">
@@ -114,3 +115,25 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
 }
 
 export default ProjectCard
+
+const styles = {
+  clickable: css`
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+
+    &:hover {
+      border-color: var(--border-strong);
+      background: var(--surface-2);
+    }
+  `,
+
+  body: css`
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 18px;
+
+    @media (max-width: 1080px) {
+      grid-template-columns: 1fr;
+    }
+  `,
+}

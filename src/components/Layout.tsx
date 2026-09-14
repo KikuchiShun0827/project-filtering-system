@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/AuthContext'
 import { useData } from '../store/DataContext'
@@ -17,8 +18,8 @@ const Layout = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="app">
-      <aside className="sidebar">
+    <div className={styles.app}>
+      <aside className={styles.sidebar}>
         <div className="brand">
           <div className="brand-mark">PF</div>
           <div>
@@ -27,10 +28,11 @@ const Layout = () => {
           </div>
         </div>
 
-        <nav className="nav">
+        <nav className={styles.nav}>
           {NAV.map((n) => (
-            <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-              <span className="nav-icon">
+            // className を文字列で渡すと、NavLink が現在のページで active クラスを付ける
+            <NavLink key={n.to} to={n.to} end={n.end} className={styles.navLink}>
+              <span className={styles.navIcon}>
                 <n.Icon />
               </span>
               <span>{n.label}</span>
@@ -46,12 +48,12 @@ const Layout = () => {
           ))}
         </nav>
 
-        <div className="sidebar-footer">
-          <div className="user-chip">
+        <div className={styles.sidebarFooter}>
+          <div className={styles.userChip}>
             <div className="avatar">{user?.name?.[0]?.toUpperCase() ?? 'U'}</div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 12 }}>{user?.name}</div>
-              <div className="user-mail">{user?.email}</div>
+              <div className={styles.userName}>{user?.name}</div>
+              <div className={styles.userMail}>{user?.email}</div>
             </div>
           </div>
           <button
@@ -66,7 +68,7 @@ const Layout = () => {
         </div>
       </aside>
 
-      <main className="main">
+      <main className={styles.main}>
         <Outlet />
       </main>
     </div>
@@ -74,3 +76,94 @@ const Layout = () => {
 }
 
 export default Layout
+
+const styles = {
+  app: css`
+    display: grid;
+    grid-template-columns: 232px 1fr;
+    min-height: 100vh;
+  `,
+
+  sidebar: css`
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  `,
+
+  nav: css`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  `,
+
+  navLink: css`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 9px;
+    color: var(--text-muted);
+    font-weight: 600;
+
+    &:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    &.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    /* 通知バッジはラベルの長さに関わらずサイドバー右端で縦に揃える */
+    & .tab-count {
+      margin-left: auto;
+    }
+  `,
+
+  navIcon: css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 18px;
+    height: 18px;
+  `,
+
+  sidebarFooter: css`
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  `,
+
+  userChip: css`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  `,
+
+  userName: css`
+    font-weight: 700;
+    font-size: 12px;
+  `,
+
+  userMail: css`
+    font-size: 11px;
+    color: var(--text-muted);
+    word-break: break-all;
+  `,
+
+  main: css`
+    padding: 24px 28px 56px;
+    min-width: 0;
+  `,
+}

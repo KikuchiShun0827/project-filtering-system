@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { StatusBadge, waitingDays } from '../../components/ui'
 import { WORK_STYLE_LABEL, type Engineer } from '../../types'
 
@@ -5,12 +6,12 @@ import { WORK_STYLE_LABEL, type Engineer } from '../../types'
 const ProfileCard = ({ engineer }: { engineer: Engineer }) => {
   return (
     <>
-      <div className="profile-head">
+      <div className={styles.head}>
         <div className="avatar" style={{ width: 52, height: 52, fontSize: 20 }}>
           {engineer.name[0]}
         </div>
         <div style={{ minWidth: 0 }}>
-          <h2 className="profile-name">{engineer.name}</h2>
+          <h2 className={styles.name}>{engineer.name}</h2>
           <div className="muted small">
             {engineer.age}歳 / {engineer.gender} / {engineer.location}
           </div>
@@ -64,3 +65,24 @@ const ProfileCard = ({ engineer }: { engineer: Engineer }) => {
 }
 
 export default ProfileCard
+
+const styles = {
+  head: css`
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    /* 氏名ブロックの下も、基本情報カードと同じ区切りにする */
+    & + .spec-block {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+  `,
+
+  name: css`
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+  `,
+}

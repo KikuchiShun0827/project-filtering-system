@@ -75,25 +75,12 @@ button {
   cursor: pointer;
 }
 
-/* ---------- レイアウト ---------- */
-.app {
-  display: grid;
-  grid-template-columns: 232px 1fr;
-  min-height: 100vh;
-}
+/*
+ * 複数のコンポーネントで共有するスタイル。
+ * 1 つのコンポーネントでしか使わないスタイルは、そのコンポーネントの中に Emotion で書く。
+ */
 
-.sidebar {
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-}
-
+/* ---------- 共通の見た目 ---------- */
 .brand {
   display: flex;
   align-items: center;
@@ -123,61 +110,6 @@ button {
   color: var(--text-muted);
 }
 
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: 9px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-.nav-link:hover {
-  background: var(--surface-2);
-  color: var(--text);
-}
-
-.nav-link.active {
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-
-/* 通知バッジはラベルの長さに関わらずサイドバー右端で縦に揃える */
-.nav-link .tab-count {
-  margin-left: auto;
-}
-
-.nav-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 18px;
-  height: 18px;
-}
-
-.sidebar-footer {
-  margin-top: auto;
-  border-top: 1px solid var(--border);
-  padding-top: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.user-chip {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .avatar {
   width: 30px;
   height: 30px;
@@ -189,36 +121,37 @@ button {
   font-weight: 700;
 }
 
-.user-mail {
-  font-size: 11px;
-  color: var(--text-muted);
-  word-break: break-all;
-}
-
-.main {
-  padding: 24px 28px 56px;
-  min-width: 0;
-}
-
-.page-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-
-.page-title {
-  margin: 0;
-  font-size: 21px;
-  font-weight: 700;
-}
-
 .page-desc {
   margin: 4px 0 0;
   color: var(--text-muted);
   font-size: 12.5px;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1080px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- 部品 ---------- */
@@ -381,211 +314,25 @@ textarea:focus {
   color: var(--low);
 }
 
-/* マッチ率 */
-/* flex にすると単位のベースラインがずれるので、ブロック内のインライン組みにする。
-   block にしないとバーが同じ行に並んでしまう */
-.match-score {
-  display: block;
-  font-weight: 800;
-  line-height: 20px;
-  font-variant-numeric: tabular-nums;
-}
-
-.match-score .unit {
-  font-size: 11px;
-  font-weight: 700;
-  margin-left: 2px;
-}
-
-.match-score.high {
-  color: var(--high);
-}
-
-.match-score.mid {
-  color: var(--mid);
-}
-
-.match-score.low {
-  color: var(--low);
-}
-
-.match-bar {
-  /* インラインのままだと height / overflow が効かず、バーが 0 高さで消える */
-  display: block;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-
-.match-bar > span {
-  display: block;
-  height: 100%;
-}
-
-.match-bar.high > span {
-  background: var(--high);
-}
-
-.match-bar.mid > span {
-  background: var(--mid);
-}
-
-.match-bar.low > span {
-  background: var(--low);
-}
-
-.match-ring {
-  --value: 0;
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: conic-gradient(var(--ring-color) calc(var(--value) * 1%), var(--surface-2) 0);
-  flex-shrink: 0;
-}
-
-.match-ring > div {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: var(--surface);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 16px;
-  color: var(--ring-color);
-}
-
-.match-ring.high {
-  --ring-color: var(--high);
-}
-
-.match-ring.mid {
-  --ring-color: var(--mid);
-}
-
-.match-ring.low {
-  --ring-color: var(--low);
-}
-
-/* ---------- 一覧 ---------- */
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.item-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.item-subject {
-  margin: 0;
-  font-size: 15px;
+/* サイドバー・タブの未確認バッジ。1桁でも丸く見えるよう最小幅を持たせる */
+.tab-count.alert {
+  min-width: 18px;
+  padding: 0 5px;
+  line-height: 16px;
+  text-align: center;
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--accent-text);
   font-weight: 700;
 }
 
-.item-meta {
-  color: var(--text-muted);
-  font-size: 12px;
-  margin-top: 3px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+/* バッジをリンクにしたときも文字色を保つ */
+a.badge {
+  text-decoration: none;
 }
 
-.card-menu {
-  position: relative;
-  flex: none;
-}
-
-.card-menu-button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  color: var(--text-muted);
-  border-radius: 8px;
-  padding: 4px 6px;
-  cursor: pointer;
-}
-
-.card-menu-button:hover {
-  background: var(--surface-2);
-  color: var(--text);
-}
-
-.card-menu-list {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  z-index: 20;
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-  padding: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-}
-
-.card-menu-list button {
-  border: none;
-  background: none;
-  font: inherit;
-  color: inherit;
-  text-align: left;
-  white-space: nowrap;
-  padding: 8px 10px;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.card-menu-list button:hover {
-  background: var(--surface-2);
-}
-
-.card-menu-list button.danger {
-  color: var(--danger);
-}
-
-.item-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 18px;
-}
-
-@media (max-width: 1080px) {
-  .item-body {
-    grid-template-columns: 1fr;
-  }
-}
-
-.spec-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px 14px;
-  margin: 10px 0 12px;
-}
-
-.spec dt {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.spec dd {
-  margin: 0;
-  font-weight: 600;
-  font-size: 13px;
+a.badge:hover {
+  filter: brightness(0.96);
 }
 
 .chip-row {
@@ -602,86 +349,78 @@ textarea:focus {
   margin-bottom: 6px;
 }
 
-.match-panel {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-}
-
-/* 設定件数ぶんの高さに収め、残りはスクロールで見せる */
-.match-list {
-  max-height: calc(var(--rows, 5) * 52px);
-  overflow-y: auto;
-  /* スクロールバーと行の内容を離す。gutter を常に確保して出現時のガタつきも防ぐ */
-  padding-right: 12px;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  overscroll-behavior: contain;
-}
-
-/* 1 行 52px = padding 7 + 名前 20 + 補足 18 + padding 7 に固定 */
-.match-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 6px;
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
   border-radius: 8px;
-  height: 52px;
+  overflow: hidden;
 }
 
-.match-row:hover {
+.seg button {
+  border: none;
   background: var(--surface);
-}
-
-.match-row + .match-row {
-  border-top: 1px solid var(--border);
-}
-
-.match-rank {
-  width: 18px;
   color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.match-name {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  padding: 4px 11px;
+  font-size: 12px;
   font-weight: 600;
-  font-size: 13px;
-  line-height: 20px;
 }
 
-/* 名前だけを省略対象にして、バッジは切れないようにする */
-.match-name-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.seg button + button {
+  border-left: 1px solid var(--border-strong);
 }
 
-/* 行の高さ 52px に収まるよう、この中のバッジだけ小さめにする */
-.match-name .badge {
-  flex: none;
-  padding: 1px 8px;
-  font-size: 11px;
-  line-height: 16px;
+.seg button.on {
+  background: var(--accent);
+  color: var(--accent-text);
 }
 
-.match-note {
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 18px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* モック挙動の注記。下の一覧を指す吹き出しにする */
+.mock-note {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 11px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12.5px;
+  line-height: 1.7;
 }
 
-.match-figure {
-  margin-left: auto;
-  text-align: right;
-  min-width: 76px;
+/* 吹き出しの尻尾。枠線ぶんを重ねて三角形の縁取りにする */
+.mock-note::before,
+.mock-note::after {
+  content: '';
+  position: absolute;
+  left: 26px;
+  border: 8px solid transparent;
+}
+
+.mock-note::before {
+  top: 100%;
+  border-top-color: var(--accent);
+}
+
+.mock-note::after {
+  top: calc(100% - 1.5px);
+  border-top-color: var(--accent-soft);
+}
+
+/* ---------- 一覧・表 ---------- */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.toolbar .grow {
+  flex: 1;
+  min-width: 180px;
 }
 
 .table {
@@ -718,174 +457,68 @@ textarea:focus {
   overflow-x: auto;
 }
 
-.card-clickable {
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+/* 行の操作メニュー列。幅を取らせず、メニューを右端に寄せる */
+.table td.col-menu {
+  width: 1%;
+  padding-left: 0;
 }
 
-.card-clickable:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-2);
-}
-
-.stack {
+.table td.col-menu > * {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* ---------- カード内の項目 ---------- */
+.item-head {
+  display: flex;
+  justify-content: space-between;
   gap: 16px;
-}
-
-.empty {
-  padding: 40px;
-  text-align: center;
-  color: var(--text-muted);
-}
-
-.toolbar {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.toolbar .grow {
-  flex: 1;
-  min-width: 180px;
-}
-
-.stat-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin-bottom: 18px;
-}
-
-.stat {
-  padding: 14px 16px;
-}
-
-.stat-button {
-  font: inherit;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.stat-button:hover:not(:disabled) {
-  border-color: var(--border-strong);
-  background: var(--surface-2);
-}
-
-.stat-button:disabled {
-  cursor: default;
-}
-
-/* 対応が必要な件数を持つカード */
-.stat-alert {
-  background: var(--danger-soft);
-  border-color: var(--danger);
-  color: var(--danger);
-}
-
-.stat-alert .stat-label {
-  color: inherit;
-}
-
-.stat-button.stat-alert:hover:not(:disabled) {
-  background: var(--danger-soft);
-  border-color: var(--danger);
-  box-shadow: inset 0 0 0 1px var(--danger);
-}
-
-.stat-label {
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
-
-.stat-value {
-  font-size: 22px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
-.notice {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 16px;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 
-.notice-body {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  flex: 1;
-  min-width: 0;
-}
-
-.notice-close {
-  flex: none;
-  border: none;
-  background: none;
-  color: inherit;
-  font-size: 18px;
-  line-height: 1;
-  padding: 3px 7px;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0.65;
-}
-
-.notice-close:hover {
-  opacity: 1;
-  background: var(--surface);
-}
-
-/* ---------- 詳細 ---------- */
-.detail-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 18px;
-  align-items: start;
-}
-
-@media (max-width: 1080px) {
-  .detail-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.profile-head {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.profile-name {
+.item-subject {
   margin: 0;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
 }
 
-.skill-list {
+.item-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 3px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.skill-row {
+.spec-grid {
   display: grid;
-  grid-template-columns: minmax(120px, 1.2fr) 60px 1fr;
-  gap: 12px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px 14px;
+  margin: 10px 0 12px;
+}
+
+.spec dt {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.spec dd {
+  margin: 0;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* 詳細ページの基本情報カード。メール情報／案件情報／概要を区切って並べる */
+.spec-block + .spec-block {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.spec-block .spec-grid {
+  margin: 0;
 }
 
 .cond-row {
@@ -905,90 +538,25 @@ textarea:focus {
   min-width: 88px;
 }
 
-.seg {
-  display: inline-flex;
-  border: 1px solid var(--border-strong);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.seg button {
-  border: none;
-  background: var(--surface);
-  color: var(--text-muted);
-  padding: 4px 11px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.seg button + button {
-  border-left: 1px solid var(--border-strong);
-}
-
-.seg button.on {
-  background: var(--accent);
-  color: var(--accent-text);
-}
-
-.req-row {
+/* 参画案件・参画メンバーの行 */
+.assign-row {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border);
-  font-size: 13px;
 }
 
-.req-row:last-child {
+.assign-row:first-child {
+  padding-top: 0;
+}
+
+.assign-row:last-child {
+  padding-bottom: 0;
   border-bottom: none;
 }
 
-.req-icon {
-  width: 18px;
-  text-align: center;
-  font-weight: 800;
-}
-
-.req-icon.hit {
-  color: var(--high);
-}
-
-.req-icon.partial {
-  color: var(--mid);
-}
-
-.req-icon.miss {
-  color: var(--danger);
-}
-
-.muted {
-  color: var(--text-muted);
-}
-
-.small {
-  font-size: 12px;
-}
-
-/* ---------- ログイン ---------- */
-.login {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: radial-gradient(1200px 600px at 20% -10%, var(--accent-soft), var(--bg));
-}
-
-.login-card {
-  width: 100%;
-  max-width: 380px;
-  padding: 30px 28px;
-}
-
-.login-card h1 {
-  margin: 14px 0 2px;
-  font-size: 19px;
-}
-
+/* ---------- フォーム ---------- */
 .field {
   display: flex;
   flex-direction: column;
@@ -1015,20 +583,6 @@ textarea:focus {
   gap: 0 16px;
 }
 
-.skill-edit-row {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) 84px minmax(0, 2fr) auto;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-@media (max-width: 900px) {
-  .skill-edit-row {
-    grid-template-columns: 1fr;
-  }
-}
-
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -1041,124 +595,6 @@ textarea:focus {
   color: var(--danger);
   font-size: 12.5px;
   font-weight: 600;
-}
-
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.setting-row:last-child {
-  border-bottom: none;
-}
-
-.setting-title {
-  font-weight: 700;
-}
-
-.switch {
-  width: 44px;
-  height: 24px;
-  border-radius: 999px;
-  border: 1px solid var(--border-strong);
-  background: var(--surface-2);
-  position: relative;
-  padding: 0;
-  flex-shrink: 0;
-}
-
-.switch::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--border-strong);
-  transition: transform 0.15s ease, background 0.15s ease;
-}
-
-.switch.on {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-}
-
-.switch.on::after {
-  transform: translateX(20px);
-  background: var(--accent);
-}
-
-.mock-note {
-  margin-top: 20px;
-  font-size: 11.5px;
-  color: var(--text-muted);
-  border-left: 3px solid var(--border-strong);
-  padding-left: 10px;
-}
-
-/* ===== モーダル ===== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(15, 23, 42, 0.45);
-}
-
-.modal {
-  width: 100%;
-  max-width: 520px;
-  max-height: calc(100vh - 48px);
-  display: flex;
-  flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-.modal-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.modal-close {
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 20px;
-  line-height: 1;
-  padding: 2px 6px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.modal-close:hover {
-  background: var(--surface-2);
-  color: var(--text);
-}
-
-.modal-body {
-  padding: 18px;
-  overflow-y: auto;
 }
 
 /* モーダル内の編集できない確認項目 */
@@ -1183,197 +619,4 @@ textarea:focus {
 
 .member-chip button:hover {
   opacity: 1;
-}
-
-/* 案件詳細の参画メンバー行 */
-.assign-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.assign-row:first-child {
-  padding-top: 0;
-}
-
-.assign-row:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-/* バッジをリンクにしたときも文字色を保つ */
-a.badge {
-  text-decoration: none;
-}
-
-a.badge:hover {
-  filter: brightness(0.96);
-}
-
-/* 元メールの原文。改行・空白をそのまま見せる */
-.mail-body {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family: inherit;
-  font-size: 12.5px;
-  line-height: 1.85;
-  color: var(--text);
-}
-
-/* 折りたたみ時は下端をフェードさせて続きがあることを示す */
-.mail-body.clamped {
-  max-height: 240px;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
-  mask-image: linear-gradient(to bottom, #000 65%, transparent);
-}
-
-/* 案件詳細の基本情報カード。メール情報／案件情報／概要を区切って並べる */
-.spec-block + .spec-block {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-}
-
-.spec-block .spec-grid {
-  margin: 0;
-}
-
-/* 要員詳細では氏名ブロックの下も同じ区切りにする */
-.profile-head + .spec-block {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-}
-
-/* 応募一覧のステータス列。セレクトが現在の状態の表示も兼ねる */
-.status-select {
-  padding: 3px 8px;
-  font-size: 12px;
-  font-weight: 700;
-  border: 1px solid transparent;
-  border-radius: 999px;
-}
-
-/* 開いた候補一覧まで状態色になると読みにくいので、選択肢は通常色に戻す */
-.status-select option {
-  background: var(--surface);
-  color: var(--text);
-}
-
-/* 提案検討→成約／見送りの進行が色で分かるようにする */
-.app-status-considering {
-  background: var(--surface-2);
-  color: var(--text-muted);
-  border-color: var(--border);
-}
-
-.app-status-proposed {
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-
-.app-status-interview {
-  background: var(--accent);
-  color: var(--accent-text);
-}
-
-.app-status-won {
-  background: var(--high);
-  color: var(--accent-text);
-}
-
-.app-status-lost {
-  background: var(--low-soft);
-  color: var(--low);
-}
-
-/* モック挙動の注記。下の一覧を指す吹き出しにする */
-.mock-note {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 11px 14px;
-  border: 1px solid var(--accent);
-  border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 12.5px;
-  line-height: 1.7;
-}
-
-/* 吹き出しの尻尾。枠線ぶんを重ねて三角形の縁取りにする */
-.mock-note::before,
-.mock-note::after {
-  content: '';
-  position: absolute;
-  left: 26px;
-  border: 8px solid transparent;
-}
-
-.mock-note::before {
-  top: 100%;
-  border-top-color: var(--accent);
-}
-
-.mock-note::after {
-  top: calc(100% - 1.5px);
-  border-top-color: var(--accent-soft);
-}
-
-.mock-note-close {
-  flex: none;
-  margin-left: auto;
-  border: none;
-  background: none;
-  color: inherit;
-  font-size: 15px;
-  line-height: 1;
-  padding: 2px 4px;
-  cursor: pointer;
-}
-
-/* 返信が届いた応募の通知マーク。メニューボタンの右上に重ねる */
-.card-menu-dot {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--danger);
-  border: 1.5px solid var(--surface);
-}
-
-/* サイドバーの未確認バッジ。1桁でも丸く見えるよう最小幅を持たせる */
-.tab-count.alert {
-  min-width: 18px;
-  padding: 0 5px;
-  line-height: 16px;
-  text-align: center;
-  background: var(--danger);
-  border-color: var(--danger);
-  color: var(--accent-text);
-  font-weight: 700;
-}
-
-/* 行の操作メニュー列。幅を取らせず右端に寄せる */
-.table td.col-menu {
-  width: 1%;
-  padding-left: 0;
-}
-
-.table td.col-menu .card-menu {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 成約・見送りで進行が終わった応募は少し落として表示する */
-.table tbody tr.row-closed td {
-  opacity: 0.72;
 }

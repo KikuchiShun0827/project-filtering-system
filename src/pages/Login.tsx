@@ -1,3 +1,4 @@
+import { css, cx } from '@emotion/css'
 import { useState, type FormEvent } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/AuthContext'
@@ -18,8 +19,8 @@ const Login = () => {
   }
 
   return (
-    <div className="login">
-      <form className="card login-card" onSubmit={submit}>
+    <div className={styles.login}>
+      <form className={cx('card', styles.card)} onSubmit={submit}>
         <div className="brand">
           <div className="brand-mark">PF</div>
           <div>
@@ -55,3 +56,24 @@ const Login = () => {
 }
 
 export default Login
+
+const styles = {
+  login: css`
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: radial-gradient(1200px 600px at 20% -10%, var(--accent-soft), var(--bg));
+  `,
+
+  card: css`
+    width: 100%;
+    max-width: 380px;
+    padding: 30px 28px;
+
+    & h1 {
+      margin: 14px 0 2px;
+      font-size: 19px;
+    }
+  `,
+}

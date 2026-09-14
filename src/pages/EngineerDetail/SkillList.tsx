@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { SKILL_CATEGORY_LABEL, type Engineer, type SkillCategory } from '../../types'
 
 /** カテゴリ別の所持技術と補足メモ */
@@ -14,9 +15,9 @@ const SkillList = ({ engineer }: { engineer: Engineer }) => {
           <div className="small" style={{ fontWeight: 700, marginBottom: 6 }}>
             {SKILL_CATEGORY_LABEL[category as SkillCategory]}
           </div>
-          <div className="skill-list">
+          <div className={styles.list}>
             {skills.map((s) => (
-              <div key={s.name} className="skill-row">
+              <div key={s.name} className={styles.row}>
                 <span style={{ fontWeight: 600 }}>{s.name}</span>
                 <span className="muted small">{s.years}年</span>
                 {s.note && <span className="muted small">{s.note}</span>}
@@ -39,3 +40,18 @@ const SkillList = ({ engineer }: { engineer: Engineer }) => {
 }
 
 export default SkillList
+
+const styles = {
+  list: css`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  `,
+
+  row: css`
+    display: grid;
+    grid-template-columns: minmax(120px, 1.2fr) 60px 1fr;
+    gap: 12px;
+    align-items: center;
+  `,
+}

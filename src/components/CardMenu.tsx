@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { MenuIcon } from './icons'
 
@@ -73,23 +74,23 @@ const CardMenu = ({
   }
 
   return (
-    <div className="card-menu" ref={root} onClick={(e) => e.stopPropagation()}>
+    <div className={styles.root} ref={root} onClick={(e) => e.stopPropagation()}>
       <button
         type="button"
         ref={button}
-        className="card-menu-button"
+        className={styles.button}
         aria-label={alert ? `${label}（未確認の返信あり）` : label}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={toggle}
       >
         <MenuIcon />
-        {alert && <span className="card-menu-dot" aria-hidden="true" />}
+        {alert && <span className={styles.dot} aria-hidden="true" />}
       </button>
 
       {open && (
         <div
-          className="card-menu-list"
+          className={styles.list}
           role="menu"
           ref={list}
           style={{ position: 'fixed', top: pos.top, right: pos.right }}
@@ -115,3 +116,74 @@ const CardMenu = ({
 }
 
 export default CardMenu
+
+const styles = {
+  root: css`
+    position: relative;
+    flex: none;
+  `,
+
+  button: css`
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 4px 6px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+  `,
+
+  /* 返信が届いた応募の通知マーク。メニューボタンの右上に重ねる */
+  dot: css`
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--danger);
+    border: 1.5px solid var(--surface);
+  `,
+
+  list: css`
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 20;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+
+    & button {
+      border: none;
+      background: none;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      white-space: nowrap;
+      padding: 8px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    & button:hover {
+      background: var(--surface-2);
+    }
+
+    & button.danger {
+      color: var(--danger);
+    }
+  `,
+}

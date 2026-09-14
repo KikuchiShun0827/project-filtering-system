@@ -1,3 +1,4 @@
+import { css, cx } from '@emotion/css'
 import { useState } from 'react'
 import type { Mail } from '../../types'
 import { formatDate } from '../Dashboard/format'
@@ -18,7 +19,7 @@ const MailSource = ({ mail }: { mail: Mail }) => {
         <span>{formatDate(mail.receivedAt)}</span>
       </div>
 
-      <pre className={`mail-body${clampable && !expanded ? ' clamped' : ''}`}>{mail.body}</pre>
+      <pre className={cx(styles.body, clampable && !expanded && 'clamped')}>{mail.body}</pre>
 
       {clampable && (
         <button className="btn btn-sm btn-block" style={{ marginTop: 12 }} onClick={() => setExpanded(!expanded)}>
@@ -30,3 +31,24 @@ const MailSource = ({ mail }: { mail: Mail }) => {
 }
 
 export default MailSource
+
+const styles = {
+  /* 元メールの原文。改行・空白をそのまま見せる */
+  body: css`
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: inherit;
+    font-size: 12.5px;
+    line-height: 1.85;
+    color: var(--text);
+
+    /* 折りたたみ時は下端をフェードさせて続きがあることを示す */
+    &.clamped {
+      max-height: 240px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
+      mask-image: linear-gradient(to bottom, #000 65%, transparent);
+    }
+  `,
+}

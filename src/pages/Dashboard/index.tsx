@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EmptyState, PageHeader } from '../../components/Page'
@@ -69,15 +70,15 @@ const Dashboard = () => {
       {syncOpen && <SyncModal onClose={() => setSyncOpen(false)} />}
 
       {lastResult && lastResult !== dismissed && (
-        <div className="notice">
-          <div className="notice-body">
+        <div className={styles.notice}>
+          <div className={styles.noticeBody}>
             <span>読み込み完了</span>
             <span>
               過去 {lastResult.days} 日ぶんから、案件 {lastResult.project} 件 / 人材 {lastResult.talent} 件 / その他{' '}
               {lastResult.other} 件を分類し、Gmail ラベルを付与しました。分類済みメールは次回の読み込み対象から除外されます。
             </span>
           </div>
-          <button type="button" className="notice-close" aria-label="通知を閉じる" onClick={() => setDismissed(lastResult)}>
+          <button type="button" className={styles.noticeClose} aria-label="通知を閉じる" onClick={() => setDismissed(lastResult)}>
             ×
           </button>
         </div>
@@ -142,7 +143,7 @@ const Dashboard = () => {
       </div>
 
       {tab === 'project' && (
-        <div className="list">
+        <div className={styles.list}>
           {filteredProjects.map((item) => (
             <ProjectCard key={item.mail.id} item={item} />
           ))}
@@ -151,7 +152,7 @@ const Dashboard = () => {
       )}
 
       {tab === 'talent' && (
-        <div className="list">
+        <div className={styles.list}>
           {filteredTalents.map((item) => (
             <TalentCard key={item.mail.id} item={item} />
           ))}
@@ -160,7 +161,7 @@ const Dashboard = () => {
       )}
 
       {tab === 'other' && (
-        <div className="list">
+        <div className={styles.list}>
           {filteredOthers.map((mail) => (
             <OtherCard key={mail.id} mail={mail} />
           ))}
@@ -172,3 +173,51 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
+const styles = {
+  notice: css`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  `,
+
+  noticeBody: css`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 0;
+  `,
+
+  noticeClose: css`
+    flex: none;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 18px;
+    line-height: 1;
+    padding: 3px 7px;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.65;
+
+    &:hover {
+      opacity: 1;
+      background: var(--surface);
+    }
+  `,
+
+  list: css`
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  `,
+}

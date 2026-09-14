@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { SKILL_CATEGORY_LABEL, type Skill, type SkillCategory } from '../../types'
 
 export const emptySkill = (): Skill => ({ name: '', category: 'language', years: 1 })
@@ -14,7 +15,7 @@ const SkillFields = ({ skills, onChange }: { skills: Skill[]; onChange: (skills:
       </p>
 
       {skills.map((skill, i) => (
-        <div key={i} className="skill-edit-row">
+        <div key={i} className={styles.row}>
           <input
             type="text"
             placeholder="技術・資格名"
@@ -61,3 +62,17 @@ const SkillFields = ({ skills, onChange }: { skills: Skill[]; onChange: (skills:
 }
 
 export default SkillFields
+
+const styles = {
+  row: css`
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) 84px minmax(0, 2fr) auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  `,
+}

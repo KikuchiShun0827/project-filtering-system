@@ -1,3 +1,4 @@
+import { css, cx } from '@emotion/css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CardMenu, { type CardMenuItem } from '../../components/CardMenu'
@@ -87,7 +88,7 @@ const Applications = () => {
             本来は Gmail に返信が届いた時点で赤●が付きます。この画面では送信を行わないため、「提案済」にした時点で
             返信が届いたものとして表示しています。
           </span>
-          <button type="button" className="mock-note-close" aria-label="この説明を閉じる" onClick={() => setNoteOpen(false)}>
+          <button type="button" className={styles.noteClose} aria-label="この説明を閉じる" onClick={() => setNoteOpen(false)}>
             ×
           </button>
         </div>
@@ -109,7 +110,7 @@ const Applications = () => {
           </thead>
           <tbody>
             {list.map((a) => (
-              <tr key={a.id} className={isClosedApplication(a.status) ? 'row-closed' : undefined}>
+              <tr key={a.id} className={isClosedApplication(a.status) ? styles.closedRow : undefined}>
                 <td style={{ fontWeight: 700 }}>{a.projectTitle}</td>
                 <td className="muted">{a.company}</td>
                 <td>
@@ -120,7 +121,7 @@ const Applications = () => {
                 <td>
                   {/* セレクトそのものが現在の状態の表示を兼ねる */}
                   <select
-                    className={`status-select app-status-${a.status}`}
+                    className={cx(styles.statusSelect, a.status)}
                     value={a.status}
                     aria-label={`${a.projectTitle} の状態`}
                     onChange={(e) => setApplicationStatus(a.id, e.target.value as ApplicationStatus)}
@@ -153,9 +154,71 @@ const Applications = () => {
           </EmptyState>
         )}
       </div>
-
     </>
   )
 }
 
 export default Applications
+
+const styles = {
+  noteClose: css`
+    flex: none;
+    margin-left: auto;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 15px;
+    line-height: 1;
+    padding: 2px 4px;
+    cursor: pointer;
+  `,
+
+  /* 成約・見送りで進行が終わった応募は少し落として表示する */
+  closedRow: css`
+    & td {
+      opacity: 0.72;
+    }
+  `,
+
+  /* ステータス列。セレクトが現在の状態の表示も兼ねる */
+  statusSelect: css`
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    /* 開いた候補一覧まで状態色になると読みにくいので、選択肢は通常色に戻す */
+    & option {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    /* 提案検討→成約／見送りの進行が色で分かるようにする */
+    &.considering {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+
+    &.proposed {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    &.interview {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    &.won {
+      background: var(--high);
+      color: var(--accent-text);
+    }
+
+    &.lost {
+      background: var(--low-soft);
+      color: var(--low);
+    }
+  `,
+}
