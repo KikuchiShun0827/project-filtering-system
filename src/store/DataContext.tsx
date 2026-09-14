@@ -60,8 +60,12 @@ interface DataContextValue {
   deleteAssignment: (assignmentId: string) => void
   /** 応募を登録する（選択した要員ぶんの行をまとめて作る） */
   addApplications: (draft: ApplicationDraft) => void
-  /** 応募のステータスを進める（更新日も今日に更新する） */
-  setApplicationStatus: (applicationId: string, status: ApplicationStatus) => void
+  /** 応募のステータスを進める（更新日も今日に更新する）。面談予定なら面談日時も一緒に保存する */
+  setApplicationStatus: (
+    applicationId: string,
+    status: ApplicationStatus,
+    patch?: Pick<Partial<Application>, 'interviewAt'>,
+  ) => void
   /** 受信した返信を確認済みにする（通知マークを消す） */
   markReplyRead: (applicationId: string) => void
   /** 未確認の返信を受け取っている応募の件数 */
@@ -261,13 +265,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   }, [addWonAssignment])
 
   const setApplicationStatus = useCallback(
-    (applicationId: string, status: ApplicationStatus) => {
+    (applicationId: string, status: ApplicationStatus, patch?: Pick<Partial<Application>, 'interviewAt'>) => {
       const today = new Date().toISOString().slice(0, 10)
       const target = applications.find((a) => a.id === applicationId)
       // 成約になった時点で参画案件一覧へ載せる
       if (target && status === 'won' && target.status !== 'won') addWonAssignment(target)
       setApplications((prev) =>
-        prev.map((a) => (a.id === applicationId ? withMockReply({ ...a, status, updatedAt: today }) : a)),
+        prev.map((a) => (a.id === applicationId ? withMockReply({ ...a, ...patch, status, updatedAt: today }) : a)),
       )
     },
     [applications, addWonAssignment],

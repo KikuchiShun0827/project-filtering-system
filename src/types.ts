@@ -284,6 +284,8 @@ export interface Application {
   appliedAt: string
   /** ステータスを最後に動かした日 YYYY-MM-DD */
   updatedAt: string
+  /** 面談日時 YYYY-MM-DDTHH:mm（面談予定を登録したときに入る） */
+  interviewAt?: string
   note?: string
   /** 提案メールへの返信を受信した日時 ISO（未受信なら未設定） */
   repliedAt?: string

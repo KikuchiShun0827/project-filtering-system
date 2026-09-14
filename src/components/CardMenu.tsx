@@ -1,4 +1,4 @@
-import { css } from '@emotion/css'
+import { css, cx } from '@emotion/css'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { MenuIcon } from './icons'
 
@@ -10,7 +10,7 @@ export interface CardMenuItem {
 }
 
 /**
- * カード右上・表の行末に置くハンバーガーメニュー。
+ * カード右上・表の行末に置くハンバーガーメニュー。buttonLabel を渡すと文言入りのボタンで開く。
  * 外側クリックと Esc で閉じ、クリックが下のカードへ伝わらないようにする。
  * リストは表のスクロール枠に切られないよう、ボタンの位置に合わせて画面基準で配置する。
  */
@@ -18,9 +18,12 @@ const CardMenu = ({
   items,
   label = 'メニューを開く',
   alert = false,
+  buttonLabel,
 }: {
   items: CardMenuItem[]
   label?: string
+  /** 指定するとハンバーガーアイコンではなく、この文言の強調ボタンでメニューを開く */
+  buttonLabel?: string
   /** 未確認の知らせがあることを示す赤いマークをボタンに重ねる */
   alert?: boolean
 }) => {
@@ -78,13 +81,14 @@ const CardMenu = ({
       <button
         type="button"
         ref={button}
-        className={styles.button}
-        aria-label={alert ? `${label}（未確認の返信あり）` : label}
+        className={buttonLabel ? cx('btn btn-sm btn-primary', styles.labelButton) : styles.button}
+        // 文言入りのボタンは表示中の文言をそのまま読み上げに使う
+        aria-label={alert ? `${buttonLabel ?? label}（未確認の返信あり）` : buttonLabel ? undefined : label}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={toggle}
       >
-        <MenuIcon />
+        {buttonLabel ?? <MenuIcon />}
         {alert && <span className={styles.dot} aria-hidden="true" />}
       </button>
 
@@ -138,6 +142,12 @@ const styles = {
       background: var(--surface-2);
       color: var(--text);
     }
+  `,
+
+  /* 通知マークをボタンの右上に重ねるための基準にする */
+  labelButton: css`
+    position: relative;
+    white-space: nowrap;
   `,
 
   /* 返信が届いた応募の通知マーク。メニューボタンの右上に重ねる */

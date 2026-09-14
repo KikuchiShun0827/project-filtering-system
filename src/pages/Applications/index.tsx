@@ -1,11 +1,11 @@
 import { css, cx } from '@emotion/css'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import CardMenu, { type CardMenuItem } from '../../components/CardMenu'
 import EmptyState from '../../components/EmptyState'
 import { PageHeader } from '../../components/PageHeader'
 import { matchRank } from '../../lib/match'
 import { useData } from '../../store/DataContext'
+import InterviewModal from './InterviewModal'
 import {
   APPLICATION_STATUS_FLOW,
   APPLICATION_STATUS_LABEL,
@@ -18,11 +18,12 @@ import {
 type StatusFilter = 'all' | ApplicationStatus
 
 const Applications = () => {
-  const { applications, projectItems, setApplicationStatus, markReplyRead } = useData()
-  const navigate = useNavigate()
+  const { applications, setApplicationStatus, markReplyRead } = useData()
   const [keyword, setKeyword] = useState('')
   const [filter, setFilter] = useState<StatusFilter>('all')
   const [noteOpen, setNoteOpen] = useState(true)
+  /** 面談日時の入力モーダルを開いている応募 */
+  const [interviewTarget, setInterviewTarget] = useState<Application | null>(null)
 
   const kw = keyword.trim().toLowerCase()
   const list = applications
@@ -41,21 +42,64 @@ const Applications = () => {
   /** 未確認の返信の件数。1件以上あるタブは件数表示を赤に切り替える */
   const unreadOf = (s: StatusFilter) => inFilter(s).filter(hasUnreadReply).length
 
-  const menuItems = (a: Application): CardMenuItem[] => {
-    // 元メールが消えている案件は詳細を開けないので、その分の項目を落とす
-    const item = projectItems.find((p) => p.project?.id === a.projectId)
-    const items: CardMenuItem[] = []
-    if (item) items.push({ label: '案件詳細を開く', onSelect: () => navigate(`/projects/${a.projectId}`) })
-    // どちらも Gmail を直接開く想定。連携するまでは何もしない
-    items.push({ label: 'メールを開く', onSelect: () => {} })
-    items.push({ label: 'メールを作成する', onSelect: () => {} })
-    if (hasUnreadReply(a)) items.push({ label: '返信を確認済みにする', onSelect: () => markReplyRead(a.id) })
-    return items
+  /** 先方の回答・面談結果を登録する。回答を見て登録するので、返信も確認済みにする */
+  const record = (a: Application, status: ApplicationStatus, patch?: Pick<Application, 'interviewAt'>) => {
+    markReplyRead(a.id)
+    setApplicationStatus(a.id, status, patch)
   }
+
+  /** 状態ごとの次の操作。進行が終わった応募には何も出さない */
+  const nextAction = (a: Application) => {
+    switch (a.status) {
+      case 'considering':
+        return (
+          <button
+            type="button"
+            className="btn btn-sm btn-primary"
+            onClick={() => {
+              // 本来はここで提案メールの作成画面（Gmail）を開く。連携するまでは案内だけ出す
+              window.alert('本来はここで提案メールの作成画面（Gmail）を開きます。\nモック版のためメールは開かず、状態だけ「提案済」に変更します。')
+              setApplicationStatus(a.id, 'proposed')
+            }}
+          >
+            応募
+          </button>
+        )
+      case 'proposed':
+        return (
+          <CardMenu
+            buttonLabel="回答を登録"
+            alert={hasUnreadReply(a)}
+            items={resultItems(a, { label: '面談予定を登録', onSelect: () => setInterviewTarget(a) })}
+          />
+        )
+      case 'interview':
+        return <CardMenu buttonLabel="面談結果を登録" items={resultItems(a, { label: '成約', onSelect: () => record(a, 'won') })} />
+      default:
+        return null
+    }
+  }
+
+  /** 先に進む選択肢と「見送り」の2択。見送りは戻せないので赤字にする */
+  const resultItems = (a: Application, next: CardMenuItem): CardMenuItem[] => [
+    next,
+    { label: '見送り', danger: true, onSelect: () => record(a, 'lost') },
+  ]
 
   return (
     <>
       <PageHeader title="応募管理" actions={<span className="muted small">{applications.length} 件</span>} />
+
+      {interviewTarget && (
+        <InterviewModal
+          application={interviewTarget}
+          onClose={() => setInterviewTarget(null)}
+          onSubmit={(interviewAt) => {
+            record(interviewTarget, 'interview', { interviewAt })
+            setInterviewTarget(null)
+          }}
+        />
+      )}
 
       <div className="tabs">
         {(['all', ...APPLICATION_STATUS_FLOW] as StatusFilter[]).map((s) => {
@@ -86,7 +130,7 @@ const Applications = () => {
         <div className="mock-note">
           <span>
             <strong>モックの表示です。</strong>
-            本来は Gmail に返信が届いた時点で赤●が付きます。この画面では送信を行わないため、「提案済」にした時点で
+            本来は Gmail に先方の返信が届いた時点で「回答を登録」ボタンに赤●が付きます。この画面では送信を行わないため、「提案済」にした時点で
             返信が届いたものとして表示しています。
           </span>
           <button type="button" className={styles.noteClose} aria-label="この説明を閉じる" onClick={() => setNoteOpen(false)}>
@@ -103,6 +147,7 @@ const Applications = () => {
               <th>送信元会社</th>
               <th>応募要員</th>
               <th>状態</th>
+              <th>面談日時</th>
               <th>応募日</th>
               <th>最終更新</th>
               <th>備考</th>
@@ -120,29 +165,15 @@ const Applications = () => {
                   </span>
                 </td>
                 <td>
-                  {/* セレクトそのものが現在の状態の表示を兼ねる */}
-                  <select
-                    className={cx(styles.statusSelect, a.status)}
-                    value={a.status}
-                    aria-label={`${a.projectTitle} の状態`}
-                    onChange={(e) => setApplicationStatus(a.id, e.target.value as ApplicationStatus)}
-                  >
-                    {APPLICATION_STATUS_FLOW.map((s) => (
-                      <option key={s} value={s}>
-                        {APPLICATION_STATUS_LABEL[s]}
-                      </option>
-                    ))}
-                  </select>
+                  <span className={cx(styles.status, a.status)}>{APPLICATION_STATUS_LABEL[a.status]}</span>
                 </td>
+                <td style={{ whiteSpace: 'nowrap' }}>{a.interviewAt ? a.interviewAt.replace('T', ' ') : '—'}</td>
                 <td style={{ whiteSpace: 'nowrap' }}>{a.appliedAt}</td>
                 <td style={{ whiteSpace: 'nowrap' }} className="muted">
                   {a.updatedAt}
                 </td>
                 <td className="muted small">{a.note ?? '—'}</td>
-                <td className="col-menu">
-                  {/* 返信が届いた応募はメニューボタンに赤いマークを重ねる */}
-                  <CardMenu items={menuItems(a)} label={`${a.projectTitle} の操作`} alert={hasUnreadReply(a)} />
-                </td>
+                <td className={styles.actionCell}>{nextAction(a)}</td>
               </tr>
             ))}
           </tbody>
@@ -181,19 +212,15 @@ const styles = {
     }
   `,
 
-  /* ステータス列。セレクトが現在の状態の表示も兼ねる */
-  statusSelect: css`
-    padding: 3px 8px;
+  /* 状態列のバッジ */
+  status: css`
+    display: inline-block;
+    padding: 3px 10px;
     font-size: 12px;
     font-weight: 700;
+    white-space: nowrap;
     border: 1px solid transparent;
     border-radius: 999px;
-
-    /* 開いた候補一覧まで状態色になると読みにくいので、選択肢は通常色に戻す */
-    & option {
-      background: var(--surface);
-      color: var(--text);
-    }
 
     /* 提案検討→成約／見送りの進行が色で分かるようにする */
     &.considering {
@@ -220,6 +247,18 @@ const styles = {
     &.lost {
       background: var(--low-soft);
       color: var(--low);
+    }
+  `,
+
+  /* 行末の操作ボタン列。幅を取らせず右端に寄せる */
+  actionCell: css`
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+
+    /* メニューの外枠ごと右端に寄せる */
+    & > * {
+      display: inline-block;
     }
   `,
 }
