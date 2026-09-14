@@ -1,3 +1,4 @@
+import { css } from '@emotion/css'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ApplicationModal from '../../components/ApplicationModal'
@@ -66,9 +67,18 @@ const EngineerDetail = () => {
       <DetailHeader
         title="要員詳細"
         actions={
-          <Link className="btn btn-primary" to={`/engineers/${engineer.id}/edit`}>
-            編集
-          </Link>
+          <div className={styles.actions}>
+            {/* スキルシートの保存先が決まるまでは何もしない */}
+            <button className="btn" onClick={() => {}}>
+              スキルシート参照
+            </button>
+            <button className="btn" onClick={() => {}}>
+              スキルシート登録
+            </button>
+            <Link className="btn btn-primary" to={`/engineers/${engineer.id}/edit`}>
+              編集
+            </Link>
+          </div>
         }
       />
 
@@ -121,3 +131,11 @@ const EngineerDetail = () => {
 }
 
 export default EngineerDetail
+
+const styles = {
+  actions: css`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  `,
+}
