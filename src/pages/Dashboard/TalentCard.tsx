@@ -1,5 +1,5 @@
 import CardMenu from '../../components/CardMenu'
-import { Section } from '../../components/Page'
+import SectionCard from '../../components/SectionCard'
 import { useData, type TalentItem } from '../../store/DataContext'
 import { WORK_STYLE_LABEL } from '../../types'
 import MailMeta from './MailMeta'
@@ -20,7 +20,7 @@ const TalentCard = ({ item }: { item: TalentItem }) => {
   )
 
   return (
-    <Section>
+    <SectionCard>
       {head}
 
       {!talent ? (
@@ -65,7 +65,7 @@ const TalentCard = ({ item }: { item: TalentItem }) => {
           </div>
         </>
       )}
-    </Section>
+    </SectionCard>
   )
 }
 

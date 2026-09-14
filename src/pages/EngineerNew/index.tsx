@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import EngineerForm from '../../components/EngineerForm'
-import { DetailHeader } from '../../components/Page'
+import { DetailHeader } from '../../components/PageHeader'
 import { useData } from '../../store/DataContext'
 
 const EngineerNew = () => {

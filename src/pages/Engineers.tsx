@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { EmptyState, PageHeader } from '../components/Page'
-import { StatusBadge, waitingDays } from '../components/ui'
+import EmptyState from '../components/EmptyState'
+import { PageHeader } from '../components/PageHeader'
+import StatusBadge from '../components/StatusBadge'
+import { waitingDays } from '../lib/waitingDays'
 import { useData } from '../store/DataContext'
 import { ASSIGNMENT_LABEL, WORK_STYLE_LABEL, type AssignmentStatus } from '../types'
 

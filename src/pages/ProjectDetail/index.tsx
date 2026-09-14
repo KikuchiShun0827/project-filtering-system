@@ -2,8 +2,10 @@ import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ApplicationModal from '../../components/ApplicationModal'
 import MatchCandidates from '../../components/MatchCandidates'
-import { DetailHeader, EmptyState, Section } from '../../components/Page'
-import { StatusBadge } from '../../components/ui'
+import EmptyState from '../../components/EmptyState'
+import { DetailHeader } from '../../components/PageHeader'
+import SectionCard from '../../components/SectionCard'
+import StatusBadge from '../../components/StatusBadge'
 import { MAX_MATCH_RESULTS, rankProfiles } from '../../lib/match'
 import { useData } from '../../store/DataContext'
 import AssignedMembers from './AssignedMembers'
@@ -79,29 +81,29 @@ const ProjectDetail = () => {
       <div className="detail-grid">
         <div className="stack">
           {assigned.length > 0 && (
-            <Section label="参画メンバー">
+            <SectionCard label="参画メンバー">
               <AssignedMembers assignments={assigned} />
-            </Section>
+            </SectionCard>
           )}
 
-          <Section>
+          <SectionCard>
             <ProjectSpec project={project} mail={mail} />
-          </Section>
+          </SectionCard>
 
-          <Section label="募集要件">
+          <SectionCard label="募集要件">
             <RequirementTable requirements={project.requirements} />
-          </Section>
+          </SectionCard>
 
           {mail?.body && (
-            <Section label="元メール">
+            <SectionCard label="元メール">
               <MailSource mail={mail} />
-            </Section>
+            </SectionCard>
           )}
         </div>
 
-        <Section label="マッチする自社要員">
+        <SectionCard label="マッチする自社要員">
           <MatchCandidates candidates={candidates} />
-        </Section>
+        </SectionCard>
       </div>
     </>
   )

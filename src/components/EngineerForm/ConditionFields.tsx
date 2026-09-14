@@ -1,4 +1,4 @@
-import { ImportanceSelector } from '../ui'
+import ImportanceSelector from '../ImportanceSelector'
 import { CONDITION_LABEL, type ConditionKey, type Importance, type ProfileCondition } from '../../types'
 
 export const defaultConditions = (): ProfileCondition[] =>

@@ -1,4 +1,5 @@
-import { PageHeader, Section } from '../../components/Page'
+import { PageHeader } from '../../components/PageHeader'
+import SectionCard from '../../components/SectionCard'
 import { useSettings } from '../../store/SettingsContext'
 import AccountSection from './AccountSection'
 import ClassifierSection from './ClassifierSection'
@@ -19,17 +20,17 @@ const SettingsPage = () => {
       />
 
       <div className="stack" style={{ maxWidth: 860 }}>
-        <Section label="連携するメールアカウント">
+        <SectionCard label="連携するメールアカウント">
           <AccountSection />
-        </Section>
+        </SectionCard>
 
-        <Section label="表示">
+        <SectionCard label="表示">
           <DisplaySection />
-        </Section>
+        </SectionCard>
 
-        <Section label="メール分類">
+        <SectionCard label="メール分類">
           <ClassifierSection />
-        </Section>
+        </SectionCard>
       </div>
     </>
   )

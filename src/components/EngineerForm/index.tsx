@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Section } from '../Page'
+import SectionCard from '../SectionCard'
 import {
   ASSIGNMENT_LABEL,
   WORK_STYLE_LABEL,
@@ -87,7 +87,7 @@ const EngineerForm = ({
 
   return (
     <form onSubmit={submit} className="stack" style={{ maxWidth: 960 }}>
-      <Section label="基本情報">
+      <SectionCard label="基本情報">
         <div className="form-grid">
           <div className="field">
             <label htmlFor="name">氏名</label>
@@ -151,9 +151,9 @@ const EngineerForm = ({
           <label htmlFor="highlights">補足（1 行につき 1 件）</label>
           <textarea id="highlights" rows={3} value={highlights} onChange={(e) => setHighlights(e.target.value)} />
         </div>
-      </Section>
+      </SectionCard>
 
-      <Section label="稼働条件">
+      <SectionCard label="稼働条件">
         <div className="form-grid">
           <div className="field">
             <label htmlFor="workAreas">勤務可能エリア（カンマ区切り）</label>
@@ -227,15 +227,15 @@ const EngineerForm = ({
             </div>
           )}
         </div>
-      </Section>
+      </SectionCard>
 
-      <Section label="所持技術・資格">
+      <SectionCard label="所持技術・資格">
         <SkillFields skills={skills} onChange={setSkills} />
-      </Section>
+      </SectionCard>
 
-      <Section label="就業希望条件の重要度">
+      <SectionCard label="就業希望条件の重要度">
         <ConditionFields conditions={conditions} onChange={setConditions} />
-      </Section>
+      </SectionCard>
 
       <div className="form-actions">
         {error && <span className="form-error">{error}</span>}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Switch } from '../../components/ui'
+import Switch from '../../components/Switch'
 import { useSettings } from '../../store/SettingsContext'
 
 /** 連携するメールアカウントの一覧と追加フォーム */

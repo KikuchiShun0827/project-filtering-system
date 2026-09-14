@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import EngineerForm from '../../components/EngineerForm'
-import { DetailHeader, EmptyState } from '../../components/Page'
+import EmptyState from '../../components/EmptyState'
+import { DetailHeader } from '../../components/PageHeader'
 import { useData } from '../../store/DataContext'
 
 const EngineerEdit = () => {

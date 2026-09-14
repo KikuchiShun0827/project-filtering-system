@@ -2,7 +2,9 @@ import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ApplicationModal from '../../components/ApplicationModal'
 import MatchCandidates from '../../components/MatchCandidates'
-import { DetailHeader, EmptyState, Section } from '../../components/Page'
+import EmptyState from '../../components/EmptyState'
+import { DetailHeader } from '../../components/PageHeader'
+import SectionCard from '../../components/SectionCard'
 import { MAX_MATCH_RESULTS, rankProjects } from '../../lib/match'
 import { useData } from '../../store/DataContext'
 import { WORK_STYLE_LABEL, type Project } from '../../types'
@@ -92,27 +94,27 @@ const EngineerDetail = () => {
       <div className="detail-grid">
         <div className="stack">
           {assigned.length > 0 && (
-            <Section label="参画案件">
+            <SectionCard label="参画案件">
               <AssignedProjects assignments={assigned} engineerId={engineer.id} />
-            </Section>
+            </SectionCard>
           )}
 
-          <Section>
+          <SectionCard>
             <ProfileCard engineer={engineer} />
-          </Section>
+          </SectionCard>
 
-          <Section label="所持技術・資格">
+          <SectionCard label="所持技術・資格">
             <SkillList engineer={engineer} />
-          </Section>
+          </SectionCard>
 
-          <Section label="就業希望条件の重要度">
+          <SectionCard label="就業希望条件の重要度">
             <ConditionList engineer={engineer} />
-          </Section>
+          </SectionCard>
         </div>
 
-        <Section label="マッチ率の高い案件">
+        <SectionCard label="マッチ率の高い案件">
           <MatchCandidates candidates={candidates} empty="分類済みの案件がありません。" />
-        </Section>
+        </SectionCard>
       </div>
     </>
   )

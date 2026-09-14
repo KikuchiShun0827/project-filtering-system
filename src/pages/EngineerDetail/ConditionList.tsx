@@ -1,4 +1,4 @@
-import { ImportanceSelector } from '../../components/ui'
+import ImportanceSelector from '../../components/ImportanceSelector'
 import { useData } from '../../store/DataContext'
 import { CONDITION_LABEL, type Engineer } from '../../types'
 

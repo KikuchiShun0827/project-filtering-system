@@ -1,4 +1,4 @@
-import { Switch } from '../../components/ui'
+import Switch from '../../components/Switch'
 import { useSettings, type ClassifierModel } from '../../store/SettingsContext'
 import SettingRow from './SettingRow'
 

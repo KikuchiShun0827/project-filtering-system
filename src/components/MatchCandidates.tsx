@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import type { MatchResult } from '../lib/match'
-import { MatchBar, MatchBreakdown, MatchRing } from './Match'
+import MatchBreakdown from './MatchBreakdown'
+import { MatchBar, MatchRing } from './MatchScore'
 
 export interface MatchCandidate {
   id: string

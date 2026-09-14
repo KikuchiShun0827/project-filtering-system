@@ -1,5 +1,5 @@
-import { css, cx } from '@emotion/css'
-import type { MouseEventHandler, ReactNode } from 'react'
+import { css } from '@emotion/css'
+import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 /** ページ上部の見出し。右側には任意のアクションを置ける */
@@ -40,30 +40,6 @@ export const DetailHeader = ({
   )
 }
 
-/** 該当データがないときの表示 */
-export const EmptyState = ({ children, card = true }: { children: ReactNode; card?: boolean }) => (
-  <div className={cx(card && 'card', styles.empty)}>{children}</div>
-)
-
-/** 見出し付きのカードセクション */
-export const Section = ({
-  label,
-  children,
-  className,
-  onClick,
-}: {
-  label?: ReactNode
-  children: ReactNode
-  className?: string
-  /** 指定するとカード全体がクリック可能になる */
-  onClick?: MouseEventHandler<HTMLElement>
-}) => (
-  <section className={cx('card card-pad', className)} onClick={onClick}>
-    {label && <div className="section-label">{label}</div>}
-    {children}
-  </section>
-)
-
 const styles = {
   head: css`
     display: flex;
@@ -78,11 +54,5 @@ const styles = {
     margin: 0;
     font-size: 21px;
     font-weight: 700;
-  `,
-
-  empty: css`
-    padding: 40px;
-    text-align: center;
-    color: var(--text-muted);
   `,
 }

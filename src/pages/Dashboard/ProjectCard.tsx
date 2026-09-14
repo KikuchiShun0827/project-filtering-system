@@ -2,10 +2,10 @@ import { css } from '@emotion/css'
 import { useMemo, type MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import CardMenu from '../../components/CardMenu'
-import { Section } from '../../components/Page'
+import SectionCard from '../../components/SectionCard'
 import { MAX_MATCH_RESULTS, rankProfiles } from '../../lib/match'
 import { useData, type ProjectItem } from '../../store/DataContext'
-import { StatusBadge } from '../../components/ui'
+import StatusBadge from '../../components/StatusBadge'
 import { useSettings } from '../../store/SettingsContext'
 import { IMPORTANCE_LABEL, WORK_STYLE_LABEL } from '../../types'
 import { formatDateTime } from './format'
@@ -50,7 +50,7 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
   )
 
   return (
-    <Section className={project ? styles.clickable : undefined} onClick={openDetail}>
+    <SectionCard className={project ? styles.clickable : undefined} onClick={openDetail}>
       {!project ? (
         <>
           {head}
@@ -110,7 +110,7 @@ const ProjectCard = ({ item }: { item: ProjectItem }) => {
           <MatchPanel label="マッチする自社要員" rows={rows} visibleRows={settings.matchCount} />
         </div>
       )}
-    </Section>
+    </SectionCard>
   )
 }
 

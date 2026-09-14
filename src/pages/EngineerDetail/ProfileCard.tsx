@@ -1,5 +1,6 @@
 import { css } from '@emotion/css'
-import { StatusBadge, waitingDays } from '../../components/ui'
+import StatusBadge from '../../components/StatusBadge'
+import { waitingDays } from '../../lib/waitingDays'
 import { WORK_STYLE_LABEL, type Engineer } from '../../types'
 
 /** 氏名・ステータス・基本スペック。ステータスの変更は編集画面から行う */

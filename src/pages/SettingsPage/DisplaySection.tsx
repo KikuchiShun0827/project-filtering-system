@@ -1,4 +1,4 @@
-import { Switch } from '../../components/ui'
+import Switch from '../../components/Switch'
 import { MAX_MATCH_RESULTS } from '../../lib/match'
 import { MAX_DISPLAY_DAYS, useSettings } from '../../store/SettingsContext'
 import SettingRow from './SettingRow'

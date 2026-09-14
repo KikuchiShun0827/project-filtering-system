@@ -1,7 +1,7 @@
 import { css } from '@emotion/css'
 import type { CSSProperties, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MatchBar, MatchScore } from '../../components/Match'
+import { MatchBar, MatchScore } from '../../components/MatchScore'
 
 export interface MatchRow {
   id: string

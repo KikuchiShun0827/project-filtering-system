@@ -1,5 +1,5 @@
 import CardMenu from '../../components/CardMenu'
-import { Section } from '../../components/Page'
+import SectionCard from '../../components/SectionCard'
 import { useData } from '../../store/DataContext'
 import type { Mail } from '../../types'
 import MailMeta from './MailMeta'
@@ -10,7 +10,7 @@ const OtherCard = ({ mail }: { mail: Mail }) => {
   const { setLabel, deleteMail } = useData()
 
   return (
-    <Section>
+    <SectionCard>
       <div className="item-head">
         <div style={{ minWidth: 0 }}>
           <h3 className="item-subject">{mail.subject}</h3>
@@ -22,7 +22,7 @@ const OtherCard = ({ mail }: { mail: Mail }) => {
       <p className="small muted" style={{ margin: '10px 0 0' }}>
         {mail.excerpt}
       </p>
-    </Section>
+    </SectionCard>
   )
 }
 
