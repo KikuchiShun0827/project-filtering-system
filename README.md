@@ -73,8 +73,8 @@ npm run dev
 現状はフロントのみ（[`src/store/DataContext.tsx`](src/store/DataContext.tsx) の `useState` に仮データ）で完結しています。実装時は次の構成を想定しています。
 
 ```
-Gmail API ──▶ バックエンド ──▶ Claude API ──▶ DB ──▶ フロント（このリポジトリ）
-   受信       未処理メール抽出   分類 + JSON 化   永続化    表示・マッチング
+Gmail API ──▶ バックエンド ──▶ OpenAI API ──▶ DB ──▶ フロント（このリポジトリ）
+   受信       未処理メール抽出   分類 + JSON 化    永続化    表示・マッチング
 ```
 
 1. Gmail API で未処理メールを取得（`Mail.classified` 相当のフラグ、または Gmail のラベル有無で判定）
@@ -91,7 +91,7 @@ Gmail API ──▶ バックエンド ──▶ Claude API ──▶ DB ──�
 
 マッチ率を AI に出させないのは、同じ入力に対して常に同じ結果が出ること・重要度の変更が即座に反映されることを担保するためです。AI の役割は「非構造データを構造化するところまで」に閉じます。
 
-コスト面でも成立しません。マッチ率は **要員数 × 案件数** の総当たりで、要員 30 名 × 案件 200 件なら 6,000 通り。1 ペアの判定に要員プロフィールと募集要件を渡すと案件あたり 2 万トークン前後になり、全件の再計算だけで数百万トークン（`claude-opus-5` の入力 $5/1M で 1 回十数ドル）かかります。しかも決定的な計算なので、同じ入力を毎回課金して投げ直すことになります。要員詳細の重要度トグルは 1 クリックで全案件のマッチ率が変わる操作ですが、これは同期関数だからこそ即時・無料で成立しています。
+コスト面でも成立しません。マッチ率は **要員数 × 案件数** の総当たりで、要員 30 名 × 案件 200 件なら 6,000 通り。1 ペアの判定に要員プロフィールと募集要件を渡すと案件あたり 2 万トークン前後になり、全件の再計算だけで数百万トークン（`gpt-5` の入力 $1.25/1M でも 1 回あたり数ドル）かかります。しかも決定的な計算なので、同じ入力を毎回課金して投げ直すことになります。要員詳細の重要度トグルは 1 クリックで全案件のマッチ率が変わる操作ですが、これは同期関数だからこそ即時・無料で成立しています。
 
 ### JSON の構成
 
@@ -202,17 +202,17 @@ Gmail API ──▶ バックエンド ──▶ Claude API ──▶ DB ──�
 ```
 
 
-### 呼び出し方（TypeScript / Anthropic SDK）
+### 呼び出し方（TypeScript / OpenAI SDK）
 
-**Structured Outputs**（`output_config.format`）でスキーマを渡すと、JSON 形式が保証されパースの失敗を気にせず済みます。Zod スキーマをそのまま渡せる `messages.parse()` を使います。
+**Structured Outputs**（`text.format`）でスキーマを渡すと、JSON 形式が保証されパースの失敗を気にせず済みます。Zod スキーマをそのまま渡せる Responses API の `responses.parse()` を使います。
 
 ```bash
-npm install @anthropic-ai/sdk zod
+npm install openai zod
 ```
 
 ```typescript
-import Anthropic from '@anthropic-ai/sdk'
-import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
+import OpenAI from 'openai'
+import { zodTextFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 
 const SKILL_CATEGORY = z.enum([
@@ -247,32 +247,24 @@ const MailExtraction = z.object({
   talent: TalentSchema.nullable(), // 同様に定義
 })
 
-const client = new Anthropic() // ANTHROPIC_API_KEY を環境変数から読む
+const client = new OpenAI() // OPENAI_API_KEY を環境変数から読む
 
-const response = await client.messages.parse({
-  model: 'claude-opus-5',
-  max_tokens: 16000,
-  system: [
-    {
-      type: 'text',
-      // 分類基準・各項目の解釈ルールを書く。全メールで共通なのでキャッシュが効く
-      text: EXTRACTION_RULES,
-      cache_control: { type: 'ephemeral' },
-    },
-  ],
-  messages: [
-    { role: 'user', content: `件名: ${mail.subject}\n差出人: ${mail.fromAddress}\n\n${mail.body}` },
-  ],
-  output_config: { format: zodOutputFormat(MailExtraction) },
+const response = await client.responses.parse({
+  model: 'gpt-5-mini',
+  // 分類基準・各項目の解釈ルールを書く。全メールで共通なのでキャッシュが効く
+  instructions: EXTRACTION_RULES,
+  input: `件名: ${mail.subject}\n差出人: ${mail.fromAddress}\n\n${mail.body}`,
+  text: { format: zodTextFormat(MailExtraction, 'mail_extraction') },
 })
 
-const extracted = response.parsed_output // パースに失敗すると null
+const extracted = response.output_parsed // パースに失敗すると null
 ```
 
-- **モデル**は `claude-opus-5`（入力 $5 / 出力 $25 per 1M tokens）を既定に。コスト優先なら `claude-haiku-4-5`（$1 / $5）に落として精度を比較する
-- **プロンプトキャッシュ**：抽出ルールを書いた system プロンプトは全メール共通なので `cache_control` を付ける。キャッシュヒットは `usage.cache_read_input_tokens` で確認できる
-- **まとめて処理する場合**は Message Batches API（`client.messages.batches.create`）を使うと 50% のコストで非同期実行できる。受信メールの定期バッチ処理向き
-- 本文が長いメールは切り詰めず、そのまま渡す（コンテキストは 1M トークン）
+- **モデル**は `gpt-5-mini`（入力 $0.25 / 出力 $2 per 1M tokens）を既定に。さらにコスト優先なら `gpt-5-nano`（$0.05 / $0.40）、抽出精度を上げたいなら `gpt-5`（$1.25 / $10）に切り替えて比較する。設定画面のプルダウン（[`src/pages/SettingsPage/ClassifierSection.tsx`](src/pages/SettingsPage/ClassifierSection.tsx)）がこのモデル名に対応している
+- **コスト感**：1 通あたり入力 2,500 / 出力 600 トークンとして、月 3,000 通なら `gpt-5-mini` で月 $5 程度。数名で使う規模ではモデル選択よりも抽出精度を優先してよい
+- **プロンプトキャッシュ**：1,024 トークン以上の共通プレフィックスは自動でキャッシュされ、入力単価が 1/10 になる。抽出ルールを `instructions` の先頭に固定し、メール本文だけを可変にすること。ヒット数は `usage.input_tokens_details.cached_tokens` で確認できる
+- **まとめて処理する場合**は Batch API を使うと 50% のコストで非同期実行できる。受信メールの定期バッチ処理向き
+- 本文が長いメールは切り詰めず、そのまま渡す（コンテキスト 40 万トークン／入力の上限は 27.2 万トークン）
 
 ### API エンドポイント案
 

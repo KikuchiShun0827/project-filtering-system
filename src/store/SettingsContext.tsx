@@ -11,7 +11,21 @@ export interface MailAccount {
   lastSyncedAt: string
 }
 
-export type ClassifierModel = 'gemini-2.5-flash' | 'claude-haiku-4-5'
+export type ClassifierModel = 'gpt-5-mini' | 'gpt-5-nano'
+
+export const CLASSIFIER_MODELS: ClassifierModel[] = ['gpt-5-mini', 'gpt-5-nano']
+
+/**
+ * OpenAI の接続状態。
+ * モック版のため実際の API キーは保存せず、表示用にマスクした文字列だけを持つ。
+ */
+export interface OpenAIConnection {
+  connected: boolean
+  /** 表示用にマスクしたキー（例: sk-proj…a1b2）。実キーは保持しない */
+  maskedKey: string
+  /** 接続した日時。未接続なら空文字 */
+  connectedAt: string
+}
 
 /** 表示期間（何日前まで）の上限 */
 export const MAX_DISPLAY_DAYS = 365
@@ -22,6 +36,8 @@ export interface Settings {
   darkMode: boolean
   /** 分類に使う AI モデル（モックのため未接続） */
   classifier: ClassifierModel
+  /** OpenAI の接続状態（モックのため未接続） */
+  openai: OpenAIConnection
   /** 分類後に Gmail 側へ自動でラベルを付与するか */
   autoLabel: boolean
   /** 一覧に表示するメールの期間（何日前まで遡るか） */
@@ -32,7 +48,8 @@ export interface Settings {
 const DEFAULT_SETTINGS: Settings = {
   matchCount: 5,
   darkMode: false,
-  classifier: 'gemini-2.5-flash',
+  classifier: 'gpt-5-mini',
+  openai: { connected: false, maskedKey: '', connectedAt: '' },
   autoLabel: true,
   displayDays: 30,
   accounts: [
@@ -71,10 +88,15 @@ interface SettingsContextValue {
   updateAccount: (id: string, patch: Partial<MailAccount>) => void
   addAccount: (address: string) => void
   removeAccount: (id: string) => void
+  connectOpenAI: (apiKey: string) => void
+  disconnectOpenAI: () => void
   reset: () => void
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
+
+/** 先頭 7 文字と末尾 4 文字だけ残す。実キーは保存しないので表示専用 */
+const maskKey = (apiKey: string) => `${apiKey.slice(0, 7)}…${apiKey.slice(-4)}`
 
 const load = (): Settings => {
   try {
@@ -86,6 +108,10 @@ const load = (): Settings => {
       ...stored,
       matchCount: Math.min(MAX_MATCH_RESULTS, Math.max(1, stored.matchCount)),
       displayDays: Math.min(MAX_DISPLAY_DAYS, Math.max(1, stored.displayDays)),
+      // 選択肢から外したモデル名が残っているとプルダウンが空表示になる
+      classifier: CLASSIFIER_MODELS.includes(stored.classifier) ? stored.classifier : DEFAULT_SETTINGS.classifier,
+      // openai を持たない時期に保存された値が残っていることがある（浅いマージでは埋まらない）
+      openai: { ...DEFAULT_SETTINGS.openai, ...stored.openai },
     }
   } catch {
     return DEFAULT_SETTINGS
@@ -130,6 +156,17 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         })),
       removeAccount: (id) =>
         setSettings((prev) => ({ ...prev, accounts: prev.accounts.filter((a) => a.id !== id) })),
+      // 受け取ったキーはマスクしてから保存し、実キーはこの関数を抜けた時点で破棄する
+      connectOpenAI: (apiKey) =>
+        setSettings((prev) => ({
+          ...prev,
+          openai: {
+            connected: true,
+            maskedKey: maskKey(apiKey),
+            connectedAt: new Date().toLocaleString('ja-JP', { dateStyle: 'medium', timeStyle: 'short' }),
+          },
+        })),
+      disconnectOpenAI: () => setSettings((prev) => ({ ...prev, openai: DEFAULT_SETTINGS.openai })),
       reset: () => setSettings(DEFAULT_SETTINGS),
     }),
     [settings],

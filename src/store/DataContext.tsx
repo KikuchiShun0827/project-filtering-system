@@ -74,7 +74,7 @@ interface DataContextValue {
 
 const DataContext = createContext<DataContextValue | null>(null)
 
-/** 件名・本文から擬似的にラベルを推定する（本来は Gemini / Haiku を呼び出す箇所） */
+/** 件名・本文から擬似的にラベルを推定する（本来は OpenAI API を呼び出す箇所） */
 const mockClassify = (mail: Mail): { label: MailLabel; confidence: number } => {
   const text = `${mail.subject} ${mail.excerpt}`
   if (/人材|ご紹介|要員|所属メンバー|稼働可能/.test(text)) {
@@ -122,7 +122,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       const isTarget = (m: Mail) => !m.classified && withinDays(m.receivedAt, days)
       if (!mails.some(isTarget)) return
       setClassifying(true)
-      // AI API 呼び出しの代わりに待機（実装時は Gemini / Claude Haiku に置き換え）
+      // AI API 呼び出しの代わりに待機（実装時は OpenAI の設定モデルに置き換え）
       await new Promise((resolve) => setTimeout(resolve, 1200))
 
       const result = { project: 0, talent: 0, other: 0, days }
